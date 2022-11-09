@@ -29,7 +29,9 @@ jobs:
           patch -N -i ../ttpatch.patch
           curl -L https://raw.githubusercontent.com/Frogging-Family/linux-tkg/master/linux-tkg-patches/6.0/0013-optimize_harder_O3.patch -o O3.patch
       - name: Build kernel
-        run: cd linux-xanmod ; su builder -c "yes '' | MAKEFLAGS=\"-j $(nproc)\" env use_numa=n use_tracers=n makepkg --noconfirm -sc"
+        run: |
+          cd linux-xanmod
+          su builder -c "yes '' | MAKEFLAGS=\"-j $(nproc)\" env use_numa=n use_tracers=n makepkg --noconfirm -sc"
       - uses: actions/upload-artifact@v3
         with:
           name: linux-xanmod
