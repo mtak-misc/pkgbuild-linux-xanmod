@@ -1,26 +1,26 @@
---- tt.patch       2022-12-14 22:21:33.060574849 +0900
-+++ tt.patch.new    2022-12-14 22:18:29.320715539 +0900
+--- tt.patch	2022-12-14 22:21:33.060574849 +0900
++++ tt.patch.new	2022-12-14 22:18:29.320715539 +0900
 @@ -1253,7 +1253,7 @@
   static int wake_affine(struct sched_domain *sd, struct task_struct *p,
-                       int this_cpu, int prev_cpu, int sync)
+  		       int this_cpu, int prev_cpu, int sync)
   {
 -@@ -7196,15 +7857,31 @@ select_task_rq_fair(struct task_struct *p, int prev_cpu, int wake_flags)
 +@@ -7196,11 +7857,23 @@ select_task_rq_fair(struct task_struct *p, int prev_cpu, int wake_flags)
-        int want_affine = 0;
-        /* SD_flags and WF_flags share the first nibble */
-        int sd_flag = wake_flags & 0xF;
+  	int want_affine = 0;
+  	/* SD_flags and WF_flags share the first nibble */
+  	int sd_flag = wake_flags & 0xF;
 @@ -1277,14 +1277,6 @@
  +#endif
-                record_wakee(p);
+  		record_wakee(p);
   
 -+#ifdef CONFIG_TT_SCHED
--+              if (IS_PWR_BL_ENABLED || sched_energy_enabled()) {
+-+		if (IS_PWR_BL_ENABLED || sched_energy_enabled()) {
 -+#else
--               if (sched_energy_enabled()) {
+- 		if (sched_energy_enabled()) {
 -+#endif
--                       new_cpu = find_energy_efficient_cpu(p, prev_cpu);
--                       if (new_cpu >= 0)
--                               return new_cpu;
+- 			new_cpu = find_energy_efficient_cpu(p, prev_cpu);
+- 			if (new_cpu >= 0)
+- 				return new_cpu;
  @@ -7214,41 +7891,66 @@ select_task_rq_fair(struct task_struct *p, int prev_cpu, int wake_flags)
-                want_affine = !wake_wide(p) && cpumask_test_cpu(cpu, p->cpus_ptr);
-        }
+  		want_affine = !wake_wide(p) && cpumask_test_cpu(cpu, p->cpus_ptr);
+  	}
