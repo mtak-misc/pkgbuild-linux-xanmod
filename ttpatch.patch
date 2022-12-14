@@ -1,5 +1,5 @@
---- tt.patch.orig       2022-12-14 22:21:33.060574849 +0900
-+++ tt.patch    2022-12-14 22:18:29.320715539 +0900
+--- tt.patch       2022-12-14 22:21:33.060574849 +0900
++++ tt.patch.new    2022-12-14 22:18:29.320715539 +0900
 @@ -1253,7 +1253,7 @@
   static int wake_affine(struct sched_domain *sd, struct task_struct *p,
                        int this_cpu, int prev_cpu, int sync)
