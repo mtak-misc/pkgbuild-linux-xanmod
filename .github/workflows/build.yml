@@ -29,7 +29,7 @@ jobs:
           curl -LO https://github.com/xanmod/linux/releases/download/6.1.7-xanmod1/patch-6.1.7-xanmod1.xz
           export OLD=$(sha256sum patch-6.1.7-xanmod1.xz | awk '{ print $1}')
           echo "sed -i 's/${OLD}/${NEW}/g' PKGBUILD" | bash
-          sed -i 's/pkgver=${_major}.5/pkgver=${_major}.7/g' PKGBUILD          
+          sed -i 's/pkgver=${_major}.7/pkgver=${_major}.8/g' PKGBUILD          
           patch -N -i ../pkgbuild.patch
           curl -L https://raw.githubusercontent.com/hamadmarri/TT-CPU-Scheduler/master/patches/6.1/tt-6.1.patch -o tt.patch
           patch -N -i ../ttpatch.patch
