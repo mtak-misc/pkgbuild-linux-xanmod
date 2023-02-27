@@ -39,6 +39,7 @@ jobs:
           patch -N -i ../pkgbuild.patch
           curl -L https://raw.githubusercontent.com/Frogging-Family/linux-tkg/master/linux-tkg-patches/6.2/0013-optimize_harder_O3.patch -o O3.patch
           curl -L https://raw.githubusercontent.com/CachyOS/kernel-patches/master/6.2/sched/0001-tt-cachy.patch -o tt.patch
+          patch -N -i ../ttpatch.patch
 #          curl -L https://raw.githubusercontent.com/hamadmarri/TT-CPU-Scheduler/master/patches/6.1/tt-6.1.patch -o tt.patch
 #          patch -N -i ../ttpatch.patch
       - name: Build kernel
