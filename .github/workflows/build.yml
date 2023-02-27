@@ -29,6 +29,11 @@ jobs:
           curl -LO https://github.com/xanmod/linux/releases/download/6.1.14-xanmod1/patch-6.1.14-xanmod1.xz
           export OLD=$(sha256sum patch-6.1.14-xanmod1.xz | awk '{ print $1}')
           echo "sed -i 's/${OLD}/${NEW}/g' PKGBUILD" | bash
+          curl -LO https://cdn.kernel.org/pub/linux/kernel/v6.x/linux-6.2.tar.xz
+          export NEW=$(sha256sum linux-6.2.tar.xz | awk '{ print $1}')
+          curl -LO https://cdn.kernel.org/pub/linux/kernel/v6.x/linux-6.1.tar.xz
+          export OLD =$(sha256sum linux-6.1.tar.xz | awk '{ print $1}')
+          echo "sed -i 's/${OLD}/${NEW}/g' PKGBUILD" | bash
           sed -i 's/_major=6.1/_major=6.2/g' PKGBUILD
           sed -i 's/pkgver=${_major}.14/pkgver=${_major}.1/g' PKGBUILD  
           patch -N -i ../pkgbuild.patch
