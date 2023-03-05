@@ -5,7 +5,7 @@
    # Apply Xanmod patch
    patch -Np1 -i ../patch-${pkgver}-xanmod${xanmod}
 -
-+  patch -Np1 -i ../../bore.patch
++#  patch -Np1 -i ../../bore.patch
 +  patch -Np1 -i ../../O3.patch
 +  
    msg2 "Setting version..."
