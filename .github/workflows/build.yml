@@ -24,12 +24,12 @@ jobs:
       - name: Apply patches
         run: |
           cd linux-xanmod
+          curl -LO https://github.com/xanmod/linux/releases/download/6.2.11-xanmod1/patch-6.2.11-xanmod1.xz
+          export NEW=$(sha256sum patch-6.2.11-xanmod1.xz | awk '{ print $1}')
           curl -LO https://github.com/xanmod/linux/releases/download/6.2.10-xanmod1/patch-6.2.10-xanmod1.xz
-          export NEW=$(sha256sum patch-6.2.10-xanmod1.xz | awk '{ print $1}')
-          curl -LO https://github.com/xanmod/linux/releases/download/6.2.9-xanmod1/patch-6.2.9-xanmod1.xz
-          export OLD=$(sha256sum patch-6.2.9-xanmod1.xz | awk '{ print $1}')
+          export OLD=$(sha256sum patch-6.2.10-xanmod1.xz | awk '{ print $1}')
           echo "sed -i 's/${OLD}/${NEW}/g' PKGBUILD" | bash
-          sed -i 's/pkgver=${_major}.9/pkgver=${_major}.10/g' PKGBUILD
+          sed -i 's/pkgver=${_major}.10/pkgver=${_major}.11/g' PKGBUILD
           patch -N -i ../pkgbuild.patch
           curl -L https://raw.githubusercontent.com/Frogging-Family/linux-tkg/master/linux-tkg-patches/6.2/0013-optimize_harder_O3.patch -o O3.patch
           curl -L https://raw.githubusercontent.com/hamadmarri/TT-CPU-Scheduler/master/patches/6.2/tt-6.2.patch -o tt.patch
