@@ -32,7 +32,8 @@ jobs:
           sed -i 's/_major=6.2/_major=6.3/g' PKGBUILD
           sed -i 's/pkgver=${_major}.12/pkgver=${_major}.0/g' PKGBUILD
           sed -i 's/74862fa8ab40edae85bb3385c0b71fe103288bce518526d63197800b3cbdecb1/ba3491f5ed6bd270a370c440434e3d69085fcdd528922fa01e73d7657db73b1e/g' PKGBUILD
-          sed -i 's/scripts/setlocalversion --save-scmversion/#scripts/setlocalversion --save-scmversion/g' PKGBUILD
+          sed -i 's/scripts\/setlocalversion --save-scmversion/#scripts\setlocalversion --save-scmversion/g' PKGBUILD
+          sed -i 's/--save-scmversion/--no-local/g' PKGBUILD
           sed -i -e '/echo "${pkgbase#linux-xanmod}" > localversion.20-pkgname/a \ \ scripts\/setlocalversion --no-local' PKGBUILD
           patch -N -i ../pkgbuild.patch
           curl -L https://raw.githubusercontent.com/Frogging-Family/linux-tkg/master/linux-tkg-patches/6.3/0013-optimize_harder_O3.patch -o O3.patch
