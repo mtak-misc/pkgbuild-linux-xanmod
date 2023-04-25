@@ -37,7 +37,6 @@ jobs:
           curl -L https://raw.githubusercontent.com/Frogging-Family/linux-tkg/master/linux-tkg-patches/6.3/0013-optimize_harder_O3.patch -o O3.patch
           curl -L https://raw.githubusercontent.com/hamadmarri/TT-CPU-Scheduler/master/patches/6.3/tt-6.3.patch -o tt.patch
           patch -N -i ../ttpatch.patch
-          cat PKGBUILD
       - name: Build kernel
         run: |
           cd linux-xanmod
