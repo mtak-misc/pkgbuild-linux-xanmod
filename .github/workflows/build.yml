@@ -33,8 +33,8 @@ jobs:
 #          curl -LO https://github.com/xanmod/linux/releases/download/6.2.12-xanmod1/patch-6.2.12-xanmod1.xz
 #          export OLD=$(sha256sum patch-6.2.12-xanmod1.xz | awk '{ print $1}')
 #          echo "sed -i 's/${OLD}/${NEW}/g' PKGBUILD" | bash
-#          sed -i 's/_major=6.2/_major=6.3/g' PKGBUILD
 #          sed -i 's/pkgver=${_major}.12/pkgver=${_major}.0/g' PKGBUILD
+#          sed -i 's/_major=6.2/_major=6.3/g' PKGBUILD
       - name: Build kernel
         run: |
           cd linux-xanmod
