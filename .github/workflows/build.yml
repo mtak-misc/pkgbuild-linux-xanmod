@@ -31,9 +31,9 @@ jobs:
           sed -i '/msg2 "Setting version..."/i \ \ patch -Np1 -i ../../tt.patch' PKGBUILD
           sed -i '/scripts\/config --enable CONFIG_STACK_VALIDATION/i \ \ scripts/config --disable CONFIG_HZ_500' PKGBUILD
           sed -i '/scripts\/config --enable CONFIG_STACK_VALIDATION/i \ \ scripts/config --enable CONFIG_HZ_1000' PKGBUILD
-          curl -LO https://github.com/xanmod/linux/releases/download/6.3.7-xanmod1/patch-6.3.7-xanmod1.xz
+          curl -LO https://master.dl.sourceforge.net/project/xanmod/releases/main/6.3.7-xanmod1/patch-6.3.7-xanmod1.xz
           export NEW=$(sha256sum patch-6.3.7-xanmod1.xz | awk '{ print $1}')
-          curl -LO https://github.com/xanmod/linux/releases/download/6.3.5-xanmod1/patch-6.3.5-xanmod1.xz
+          curl -LO https://master.dl.sourceforge.net/project/xanmod/releases/main/6.3.5-xanmod1/patch-6.3.5-xanmod1.xz
           export OLD=$(sha256sum patch-6.3.5-xanmod1.xz | awk '{ print $1}')
           echo "sed -i 's/${OLD}/${NEW}/g' PKGBUILD" | bash
           sed -i 's/pkgver=${_major}.5/pkgver=${_major}.7/g' PKGBUILD
