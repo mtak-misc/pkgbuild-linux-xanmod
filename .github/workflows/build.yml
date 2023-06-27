@@ -25,8 +25,7 @@ jobs:
         run: |
           cd linux-xanmod
           curl -L https://raw.githubusercontent.com/Frogging-Family/linux-tkg/master/linux-tkg-patches/6.4/0013-optimize_harder_O3.patch -o O3.patch
-          curl -L https://raw.githubusercontent.com/CachyOS/kernel-patches/master/6.4/sched/0001-tt.patch -o tt.patch
-          patch -N -i ../ttpatch.patch
+          curl -L https://raw.githubusercontent.com/CachyOS/kernel-patches/master/6.4/sched/0001-tt.patch -o tt.patch          
           sed -i '/msg2 "Setting version..."/i \ \ patch -Np1 -i ../../O3.patch' PKGBUILD
           sed -i '/scripts\/config --enable CONFIG_STACK_VALIDATION/i \ \ scripts/config --disable CONFIG_HZ_500' PKGBUILD
           sed -i '/scripts\/config --enable CONFIG_STACK_VALIDATION/i \ \ scripts/config --enable CONFIG_HZ_1000' PKGBUILD
@@ -42,6 +41,7 @@ jobs:
           curl -LO https://cdn.kernel.org/pub/linux/kernel/v6.x/linux-6.3.tar.xz
           export OLD=$(sha256sum linux-6.3.tar.xz | awk '{ print $1}')
           echo "sed -i 's/${OLD}/${NEW}/g' PKGBUILD" | bash
+#          patch -N -i ../ttpatch.patch
 #          sed -i '/msg2 "Setting version..."/i \ \ patch -Np1 -i ../../tt.patch' PKGBUILD
       - name: Build kernel
         run: |
