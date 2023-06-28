@@ -43,8 +43,6 @@ jobs:
           curl -LO https://cdn.kernel.org/pub/linux/kernel/v6.x/linux-6.3.tar.xz
           export OLD=$(sha256sum linux-6.3.tar.xz | awk '{ print $1}')
           echo "sed -i 's/${OLD}/${NEW}/g' PKGBUILD" | bash
-#          patch -N -i ../ttpatch.patch
-#          sed -i '/msg2 "Setting version..."/i \ \ patch -Np1 -i ../../tt.patch' PKGBUILD
       - name: Build kernel
         run: |
           cd linux-xanmod
