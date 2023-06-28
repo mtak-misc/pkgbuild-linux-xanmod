@@ -21,6 +21,6 @@
 - 			new_cpu = find_energy_efficient_cpu(p, prev_cpu);
 - 			if (new_cpu >= 0)
 - 				return new_cpu;
- @@ -7615,41 +8291,66 @@ select_task_rq_fair(struct task_struct *p, int prev_cpu, int wake_flags)
+ @@ -7676,41 +8352,66 @@ select_task_rq_fair(struct task_struct *p, int prev_cpu, int wake_flags)
   		want_affine = !wake_wide(p) && cpumask_test_cpu(cpu, p->cpus_ptr);
   	}
