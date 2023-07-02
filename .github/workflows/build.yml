@@ -33,8 +33,8 @@ jobs:
           sed -i '/scripts\/config --enable CONFIG_STACK_VALIDATION/i \ \ scripts/config --enable CONFIG_HZ_1000' PKGBUILD
           curl -LO https://github.com/xanmod/linux/releases/download/6.4.1-xanmod1/patch-6.4.1-xanmod1.xz
           export NEW=$(sha256sum patch-6.4.1-xanmod1.xz | awk '{ print $1}')
-          curl -LO https://github.com/xanmod/linux/releases/download/6.4.0-xanmod1/patch-6.4.0-xanmod1.xz
-          export OLD=$(sha256sum patch-6.4.0-xanmod1.xz | awk '{ print $1}')
+          curl -LO https://github.com/xanmod/linux/releases/download/6.4.0-xanmod2/patch-6.4.0-xanmod2.xz
+          export OLD=$(sha256sum patch-6.4.0-xanmod2.xz | awk '{ print $1}')
           echo "sed -i 's/${OLD}/${NEW}/g' PKGBUILD" | bash
           sed -i 's/pkgver=${_major}.0/pkgver=${_major}.1/g' PKGBUILD
           sed -i 's/xanmod=2/xanmod=1/g' PKGBUILD
