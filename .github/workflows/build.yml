@@ -31,6 +31,7 @@ jobs:
           sed -i '/msg2 "Setting version..."/i \ \ patch -Np1 -i ../../O3.patch' PKGBUILD
           sed -i '/scripts\/config --enable CONFIG_STACK_VALIDATION/i \ \ scripts/config --disable CONFIG_HZ_500' PKGBUILD
           sed -i '/scripts\/config --enable CONFIG_STACK_VALIDATION/i \ \ scripts/config --enable CONFIG_HZ_1000' PKGBUILD
+          sed -i '/scripts\/config --enable CONFIG_STACK_VALIDATION/i \ \ scripts/config --enable CONFIG_LOCK_MM_AND_FIND_VMA' PKGBUILD
           sed -i '/scripts\/config --enable CONFIG_STACK_VALIDATION/i \ \ scripts/config --disable CONFIG_PER_VMA_LOCK' PKGBUILD
           curl -LO https://github.com/xanmod/linux/releases/download/6.4.1-xanmod1/patch-6.4.1-xanmod1.xz
           export NEW=$(sha256sum patch-6.4.1-xanmod1.xz | awk '{ print $1}')
