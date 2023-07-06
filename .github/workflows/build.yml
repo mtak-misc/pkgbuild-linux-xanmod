@@ -35,12 +35,13 @@ jobs:
           sed -i "/cp -vf CONFIGS\/xanmod\/gcc/a \ \ sed -i 's/CONFIG_PER_VMA_LOCK=y/# CONFIG_PER_VMA_LOCK is not set/g' .config" PKGBUILD
           sed -i "/cp -vf CONFIGS\/xanmod\/gcc/a \ \ sed -i '/# CONFIG_PER_VMA_LOCK_STATS is not set/d' .config" PKGBUILD
           cat PKGBUILD
-#          curl -LO https://github.com/xanmod/linux/releases/download/6.4.1-xanmod1/patch-6.4.1-xanmod1.xz
-#          export NEW=$(sha256sum patch-6.4.1-xanmod1.xz | awk '{ print $1}')
-#          curl -LO https://github.com/xanmod/linux/releases/download/6.4.0-xanmod2/patch-6.4.0-xanmod2.xz
-#          export OLD=$(sha256sum patch-6.4.0-xanmod2.xz | awk '{ print $1}')
-#          echo "sed -i 's/${OLD}/${NEW}/g' PKGBUILD" | bash
-#          sed -i 's/pkgver=${_major}.0/pkgver=${_major}.1/g' PKGBUILD
+          curl -LO https://github.com/xanmod/linux/releases/download/6.4.2-xanmod1/patch-6.4.2-xanmod1.xz
+          export NEW=$(sha256sum patch-6.4.2-xanmod1.xz | awk '{ print $1}')
+          curl -LO https://github.com/xanmod/linux/releases/download/6.4.1-xanmod1/patch-6.4.1-xanmod1.xz
+          export OLD=$(sha256sum patch-6.4.1-xanmod1.xz | awk '{ print $1}')
+          echo "sed -i 's/${OLD}/${NEW}/g' PKGBUILD" | bash
+          sed -i 's/pkgver=${_major}.1/pkgver=${_major}.2/g' PKGBUILD
+          sed -i 's/pkgrel=2/pkgrel=${xanmod}/g' PKGBUILD
 #          sed -i 's/xanmod=2/xanmod=1/g' PKGBUILD
 #          sed -i 's/_major=6.3/_major=6.4/g' PKGBUILD
 #          curl -LO https://cdn.kernel.org/pub/linux/kernel/v6.x/linux-6.4.tar.xz
