@@ -31,16 +31,13 @@ jobs:
           sed -i '/msg2 "Setting version..."/i \ \ patch -Np1 -i ../../O3.patch' PKGBUILD
           sed -i '/scripts\/config --enable CONFIG_STACK_VALIDATION/i \ \ scripts/config --disable CONFIG_HZ_500' PKGBUILD
           sed -i '/scripts\/config --enable CONFIG_STACK_VALIDATION/i \ \ scripts/config --enable CONFIG_HZ_1000' PKGBUILD
-#          curl -LO https://github.com/xanmod/linux/releases/download/6.4.2-xanmod1/patch-6.4.2-xanmod1.xz
-#          export NEW=$(sha256sum patch-6.4.2-xanmod1.xz | awk '{ print $1}')
-#          curl -LO https://github.com/xanmod/linux/releases/download/6.4.1-xanmod1/patch-6.4.1-xanmod1.xz
-#          export OLD=$(sha256sum patch-6.4.1-xanmod1.xz | awk '{ print $1}')
-#          echo "sed -i 's/${OLD}/${NEW}/g' PKGBUILD" | bash
-#          sed -i 's/pkgver=${_major}.1/pkgver=${_major}.2/g' PKGBUILD
-#          sed -i 's/pkgrel=2/pkgrel=${xanmod}/g' PKGBUILD
-#          sed -i '/msg2 "Setting version..."/i \ \ patch -Np1 -i ../../../per_vma_lock.patch' PKGBUILD
-#          sed -i "/cp -vf CONFIGS\/xanmod\/gcc/a \ \ sed -i 's/CONFIG_PER_VMA_LOCK=y/# CONFIG_PER_VMA_LOCK is not set/g' .config" PKGBUILD
-#          sed -i "/cp -vf CONFIGS\/xanmod\/gcc/a \ \ sed -i '/# CONFIG_PER_VMA_LOCK_STATS is not set/d' .config" PKGBUILD
+          curl -LO https://github.com/xanmod/linux/releases/download/6.4.4-xanmod1/patch-6.4.4-xanmod1.xz
+          export NEW=$(sha256sum patch-6.4.4-xanmod1.xz | awk '{ print $1}')
+          curl -LO https://github.com/xanmod/linux/releases/download/6.4.3-xanmod1/patch-6.4.3-xanmod1.xz
+          export OLD=$(sha256sum patch-6.4.3-xanmod1.xz | awk '{ print $1}')
+          echo "sed -i 's/${OLD}/${NEW}/g' PKGBUILD" | bash
+          sed -i 's/pkgver=${_major}.3/pkgver=${_major}.4/g' PKGBUILD
+          sed -i 's/pkgrel=2/pkgrel=${xanmod}/g' PKGBUILD
 #          sed -i 's/xanmod=2/xanmod=1/g' PKGBUILD
 #          sed -i 's/_major=6.3/_major=6.4/g' PKGBUILD
 #          curl -LO https://cdn.kernel.org/pub/linux/kernel/v6.x/linux-6.4.tar.xz
