@@ -26,14 +26,14 @@ jobs:
           chown builder -R ..
           chown builder -R /tmp
           su builder -c "gpg --recv 38DBBDC86092693E"
-#      - name: Apply patches
-#        run: |
-#          cd linux-xanmod-bore
-#          export OLD=$(sha256sum 0001-bore.patch | awk '{ print $1}')
-#          curl -L https://raw.githubusercontent.com/firelzrd/bore-scheduler/main/bore-stable/0001-linux6.4.y-bore3.1.0.patch -o 0001-bore.patch
-#          patch -N -i ../borepatch.patch 
-#          export NEW=$(sha256sum 0001-bore.patch | awk '{ print $1}')
-#          echo "sed -i 's/${OLD}/${NEW}/g' PKGBUILD" | bash
+      - name: Apply patches
+        run: |
+          cd linux-xanmod-bore
+          export OLD=$(sha256sum 0001-bore.patch | awk '{ print $1}')
+          curl -L https://github.com/firelzrd/bore-scheduler/raw/main/bore-stable/0001-linux6.4.y-bore3.1.2.patch -o 0001-bore.patch
+          patch -N -i ../borepatch.patch 
+          export NEW=$(sha256sum 0001-bore.patch | awk '{ print $1}')
+          echo "sed -i 's/${OLD}/${NEW}/g' PKGBUILD" | bash
       - name: Build
         run: |
           cd linux-xanmod-bore
