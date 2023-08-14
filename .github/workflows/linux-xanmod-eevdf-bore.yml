@@ -31,7 +31,7 @@ jobs:
           cd linux-xanmod-bore
           curl -LO https://github.com/firelzrd/bore-scheduler/raw/main/eevdf-bore-dev/0001-EEVDF.patch
           patch -N -i ../eevdfpatch.patch 
-          sed -i '/msg2 "Setting version..."/i \ \ patch -Np1 -i ../../0001-EEVDF.patch' PKGBUILD
+          sed -i '/echo "Setting version..."/i \ \ patch -Np1 -i ../../0001-EEVDF.patch' PKGBUILD
           export OLD=$(sha256sum 0001-bore.patch | awk '{ print $1}')
           curl -L https://github.com/firelzrd/bore-scheduler/raw/main/eevdf-bore-dev/0001-linux6.4.y-eevdf-bore3.1.2.patch -o 0001-bore.patch
           patch -N -i ../eevdfborepatch.patch 
