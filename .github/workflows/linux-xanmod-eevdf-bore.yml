@@ -29,7 +29,7 @@ jobs:
       - name: Apply patches
         run: |
           cd linux-xanmod-bore
-          curl -L https://github.com/firelzrd/bore-scheduler/raw/main/eevdf-bore-dev/0001-linux6.4.y-eevdf-bore3.1.2.patch -o 0001-EEVDF.patch
+          curl -LO https://github.com/firelzrd/bore-scheduler/raw/main/eevdf-bore-dev/0001-EEVDF.patchhttps://github.com/firelzrd/bore-scheduler/raw/main/eevdf-bore-dev/0001-EEVDF.patch
           patch -N -i ../eevdfpatch.patch 
           sed -i '/msg2 "Setting version..."/i \ \ patch -Np1 -i ../../0001-EEVDF.patch' PKGBUILD
           export OLD=$(sha256sum 0001-bore.patch | awk '{ print $1}')
@@ -37,6 +37,9 @@ jobs:
           patch -N -i ../eevdfborepatch.patch 
           export NEW=$(sha256sum 0001-bore.patch | awk '{ print $1}')
           echo "sed -i 's/${OLD}/${NEW}/g' PKGBUILD" | bash
+          sed -i '/0002-constgran-vanilla-max/d' PKGBUILD
+          sed -i '/0003-glitched-cfs/d' PKGBUILD
+          sed -i '/0004-glitched-cfs-additions/d' PKGBUILD
           sed -i 's/pkgbase=linux-xanmod-bore/pkgbase=linux-xanmod-eevdf-bore/g' PKGBUILD
       - name: Build
         run: |
