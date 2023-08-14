@@ -1,10 +1,10 @@
-name: build-linux-xanmod-evdf-bore
+name: build-linux-xanmod-eevdf-bore
 
 on:
   workflow_dispatch:
 
 env:
-  PKGDEST: "/tmp/linux-xanmod-evdf-bore"
+  PKGDEST: "/tmp/linux-xanmod-eevdf-bore"
 
 jobs:
   build:
@@ -37,7 +37,7 @@ jobs:
           patch -N -i ../eevdfborepatch.patch 
           export NEW=$(sha256sum 0001-bore.patch | awk '{ print $1}')
           echo "sed -i 's/${OLD}/${NEW}/g' PKGBUILD" | bash
-          sed -i 's/pkgbase=linux-xanmod-bore/pkgbase=linux-xanmod-evdf-bore/g' PKGBUILD
+          sed -i 's/pkgbase=linux-xanmod-bore/pkgbase=linux-xanmod-eevdf-bore/g' PKGBUILD
       - name: Build
         run: |
           cd linux-xanmod-bore
@@ -45,6 +45,6 @@ jobs:
 #          su builder -c "yes '' | makepkg --noconfirm -sc"
       - uses: actions/upload-artifact@v3
         with:
-          name: linux-xanmod-evdf-bore
+          name: linux-xanmod-eevdf-bore
           path: ${{ env.PKGDEST }}/*.pkg.tar.zst
         
