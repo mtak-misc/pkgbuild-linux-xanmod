@@ -30,10 +30,11 @@ jobs:
         run: |
           cd linux-xanmod-bore
           export OLD=$(sha256sum 0001-bore.patch | awk '{ print $1}')
-          curl -L https://github.com/firelzrd/bore-scheduler/raw/main/bore-stable/0001-linux6.4.y-bore3.1.2.patch -o 0001-bore.patch
+          curl -L https://github.com/firelzrd/bore-scheduler/raw/main/eevdf-bore-dev/0001-linux6.4.y-eevdf-bore3.1.2.patch -o 0001-bore.patch
           patch -N -i ../borepatch.patch 
           export NEW=$(sha256sum 0001-bore.patch | awk '{ print $1}')
           echo "sed -i 's/${OLD}/${NEW}/g' PKGBUILD" | bash
+#          curl -L https://github.com/firelzrd/bore-scheduler/raw/main/bore-stable/0001-linux6.4.y-bore3.1.2.patch -o 0001-bore.patch
       - name: Build
         run: |
           cd linux-xanmod-bore
