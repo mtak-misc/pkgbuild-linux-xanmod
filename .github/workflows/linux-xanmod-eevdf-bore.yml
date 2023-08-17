@@ -43,6 +43,7 @@ jobs:
           sed -i 's/pkgbase=linux-xanmod-bore/pkgbase=linux-xanmod-eevdf-bore/g' PKGBUILD
           sed -i '/msg2 "Setting version..."/i \ \ patch -Np1 -i ../../0004-glitched-cfs-additions.patch' PKGBUILD
           curl -LO https://master.dl.sourceforge.net/project/xanmod/releases/main/6.4.11-xanmod1/patch-6.4.11-xanmod1.xz
+          sed -i 's/sourceforge.net\/projects\/xanmod\/files\/releases\/main/master.dl.sourceforge.net\/project\/xanmod\/releases\/main/g' PKGBUILD
           export NEW=$(sha256sum patch-6.4.11-xanmod1.xz | awk '{ print $1}')
           curl -LO https://github.com/xanmod/linux/releases/download/6.4.10-xanmod1/patch-6.4.10-xanmod1.xz
           export OLD=$(sha256sum patch-6.4.10-xanmod1.xz | awk '{ print $1}')
