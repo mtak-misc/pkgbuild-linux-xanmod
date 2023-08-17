@@ -36,13 +36,13 @@ jobs:
           curl -LO https://github.com/micros24/linux-xanmod-bore/raw/6.4/0003-glitched-cfs.patch
           sed -i '/msg2 "Setting version..."/i \ \ patch -Np1 -i ../../0003-glitched-cfs.patch' PKGBUILD
           sed -i '/msg2 "Setting version..."/i \ \ patch -Np1 -i ../../0004-glitched-cfs-additions.patch' PKGBUILD
-          curl -LO https://sourceforge.net/projects/xanmod/files/releases/main/6.4.10-xanmod1/patch-6.4.10-xanmod1.xz
-          export NEW=$(sha256sum patch-6.4.10-xanmod1.xz | awk '{ print $1}')
-          curl -LO https://github.com/xanmod/linux/releases/download/6.4.8-xanmod1/patch-6.4.8-xanmod1.xz
-          export OLD=$(sha256sum patch-6.4.8-xanmod1.xz | awk '{ print $1}')
-          echo "sed -i 's/${OLD}/${NEW}/g' PKGBUILD" | bash
-          sed -i 's/pkgver=${_major}.8/pkgver=${_major}.10/g' PKGBUILD
-          sed -i 's/github.com\/xanmod\/linux\/releases\/download/sourceforge.net\/projects\/xanmod\/files\/releases\/main/g' PKGBUILD
+#          curl -LO https://sourceforge.net/projects/xanmod/files/releases/main/6.4.10-xanmod1/patch-6.4.10-xanmod1.xz
+#          export NEW=$(sha256sum patch-6.4.10-xanmod1.xz | awk '{ print $1}')
+#          curl -LO https://github.com/xanmod/linux/releases/download/6.4.8-xanmod1/patch-6.4.8-xanmod1.xz
+#          export OLD=$(sha256sum patch-6.4.8-xanmod1.xz | awk '{ print $1}')
+#          echo "sed -i 's/${OLD}/${NEW}/g' PKGBUILD" | bash
+#          sed -i 's/pkgver=${_major}.8/pkgver=${_major}.10/g' PKGBUILD
+#          sed -i 's/github.com\/xanmod\/linux\/releases\/download/sourceforge.net\/projects\/xanmod\/files\/releases\/main/g' PKGBUILD
 #          curl -LO https://cdn.kernel.org/pub/linux/kernel/v6.x/incr/patch-6.4.5-6.xz
 #          xz -d patch-6.4.5-6.xz
 #          sed -i '/msg2 "Setting version..."/i \ \ patch -Np1 -i ../../patch-6.4.5-6' PKGBUILD
