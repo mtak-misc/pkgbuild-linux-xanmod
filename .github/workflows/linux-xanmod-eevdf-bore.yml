@@ -29,8 +29,8 @@ jobs:
       - name: Apply patches
         run: |
           cd linux-xanmod-bore
-          curl -L https://raw.githubusercontent.com/Frogging-Family/linux-tkg/master/linux-tkg-patches/6.5/0003-eevdf.patch -o 0001-EEVDF.patch
-          patch -N -i ../eevdfpatch.patch 
+          curl -LO https://raw.githubusercontent.com/CachyOS/kernel-patches/master/6.5/sched/0001-EEVDF.patch
+          patch -N -i ../eevdfpatch2.patch 
           sed -i '/echo "Setting version..."/i \ \ patch -Np1 -i ../../0001-EEVDF.patch' PKGBUILD
           export OLD=$(sha256sum 0005-o3-optimization.patch | awk '{ print $1}')
           curl -L https://raw.githubusercontent.com/Frogging-Family/linux-tkg/master/linux-tkg-patches/6.5/0013-optimize_harder_O3.patch -o 0005-o3-optimization.patch
