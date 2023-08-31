@@ -57,7 +57,7 @@ jobs:
           echo "sed -i 's/${OLD}/${NEW}/g' PKGBUILD" | bash
           sed -i 's/_major=6.4/_major=6.5/g' PKGBUILD
           sed -i 's/releases\/main/releases\edge/g' PKGBUILD
-          sed -i 's/pkgver=${_major}.12/pkgver=${_major}.0/g' PKGBUILD
+          sed -i 's/pkgver=${_major}.13/pkgver=${_major}.0/g' PKGBUILD
       - name: Build
         run: |
           cd linux-xanmod-bore
