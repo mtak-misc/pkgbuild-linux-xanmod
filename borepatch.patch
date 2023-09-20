@@ -1,0 +1,31 @@
+--- 0001-bore.patch.orig	2023-09-20 21:13:13.734891589 +0900
++++ 0001-bore.patch	2023-09-20 21:30:12.047289265 +0900
+@@ -258,10 +258,12 @@
+  /*
+   * Perform scheduler related setup for a newly forked process p.
+   * p is forked by current.
+-@@ -4507,6 +4656,9 @@ static void __sched_fork(unsigned long clone_flags, struct task_struct *p)
++@@ -4507,8 +4656,11 @@ static void __sched_fork(unsigned long clone_flags, struct task_struct *p)
+  	p->se.prev_sum_exec_runtime	= 0;
+  	p->se.nr_migrations		= 0;
+  	p->se.vruntime			= 0;
++ 	p->se.dur_avg			= 0;
++ 	p->se.prev_sleep_sum_runtime	= 0;
+ +#ifdef CONFIG_SCHED_BORE
+ +	sched_fork_bore(p);
+ +#endif // CONFIG_SCHED_BORE
+@@ -508,11 +510,11 @@
+ +#ifdef CONFIG_SCHED_BORE
+ +	u64 vslice = calc_delta_fair_debit(se->slice, se);
+ +#else // CONFIG_SCHED_BORE
+- 	u64 vslice = calc_delta_fair(se->slice, se);
++ 	u64 vslice, vruntime = avg_vruntime(cfs_rq);
+ +#endif // CONFIG_SCHED_BORE
+- 	u64 vruntime = avg_vruntime(cfs_rq);
+  	s64 lag = 0;
+- 
++
++ 	if (!se->custom_slice)
+ @@ -6482,6 +6637,9 @@ static void dequeue_task_fair(struct rq *rq, struct task_struct *p, int flags)
+  	util_est_dequeue(&rq->cfs, p);
+  
