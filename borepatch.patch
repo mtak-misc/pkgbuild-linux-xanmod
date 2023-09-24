@@ -5,7 +5,7 @@
    * Perform scheduler related setup for a newly forked process p.
    * p is forked by current.
 -@@ -4507,6 +4656,9 @@ static void __sched_fork(unsigned long clone_flags, struct task_struct *p)
-+@@ -4507,8 +4656,11 @@ static void __sched_fork(unsigned long clone_flags, struct task_struct *p)
++@@ -4507,9 +4656,12 @@ static void __sched_fork(unsigned long clone_flags, struct task_struct *p)
   	p->se.prev_sum_exec_runtime	= 0;
   	p->se.nr_migrations		= 0;
   	p->se.vruntime			= 0;
