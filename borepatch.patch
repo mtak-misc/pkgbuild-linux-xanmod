@@ -1,0 +1,21 @@
+--- 0001-bore.patch.orig	2023-09-24 14:03:21.990439243 +0900
++++ 0001-bore.patch	2023-09-24 14:06:03.096331639 +0900
+@@ -258,14 +258,17 @@
+  /*
+   * Perform scheduler related setup for a newly forked process p.
+   * p is forked by current.
+-@@ -4507,6 +4656,9 @@ static void __sched_fork(unsigned long clone_flags, struct task_struct *p)
++@@ -4507,8 +4656,11 @@ static void __sched_fork(unsigned long clone_flags, struct task_struct *p)
+  	p->se.prev_sum_exec_runtime	= 0;
+  	p->se.nr_migrations		= 0;
+  	p->se.vruntime			= 0;
++ 	p->se.dur_avg			= 0;
++ 	p->se.prev_sleep_sum_runtime	= 0;
+ +#ifdef CONFIG_SCHED_BORE
+ +	sched_fork_bore(p);
+ +#endif // CONFIG_SCHED_BORE
+  	p->se.vlag			= 0;
++ 	p->se.slice			= sysctl_sched_base_slice;
+  	INIT_LIST_HEAD(&p->se.group_node);
+  
+ @@ -4828,6 +4980,9 @@ void sched_cgroup_fork(struct task_struct *p, struct kernel_clone_args *kargs)
