@@ -1,19 +1,5 @@
 --- 0001-EEVDF.patch.orig	2023-10-07 10:24:34.957322243 +0900
 +++ 0001-EEVDF.patch	2023-10-07 10:30:32.310334334 +0900
-@@ -93,10 +93,12 @@
- index c52c2eba7c..8116ef56d6 100644
- --- a/kernel/sched/core.c
- +++ b/kernel/sched/core.c
--@@ -4501,6 +4501,8 @@ static void __sched_fork(unsigned long clone_flags, struct task_struct *p)
-+@@ -4501,8 +4501,10 @@ static void __sched_fork(unsigned long clone_flags, struct task_struct *p)
-  	p->se.prev_sum_exec_runtime	= 0;
-  	p->se.nr_migrations		= 0;
-  	p->se.vruntime			= 0;
-+ 	p->se.dur_avg			= 0;
-+ 	p->se.prev_sleep_sum_runtime	= 0;
- +	p->se.vlag			= 0;
- +	p->se.slice			= sysctl_sched_base_slice;
-  	INIT_LIST_HEAD(&p->se.group_node);
 @@ -284,8 +286,8 @@
  - *
  - * (default: 1 msec * (1 + ilog(ncpus)), units: nanoseconds)
