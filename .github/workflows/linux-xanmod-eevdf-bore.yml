@@ -33,7 +33,9 @@ jobs:
           patch -N -i ../eevdfpatch.patch 
           sed -i '/echo "Setting version..."/i \ \ patch -Np1 -i ../../0001-EEVDF.patch' PKGBUILD
           sed -i '/echo "Setting version..."/i \ \ patch -Np1 -i ../../../fair.patch' PKGBUILD
-          sed -i '/echo "Setting version..."/i \ \ patch -Np1 -i ../../../autogrouppatch.patch' PKGBUILD
+          curl -LO https://github.com/firelzrd/bore-scheduler/raw/main/patches/linux-6.5-eevdf-bore/0001-Disable-sched_autogroup_enabled-by-default.patch
+          patch -N -i ../autogrouppatch.patch 
+          sed -i '/echo "Setting version..."/i \ \ patch -Np1 -i ../../0001-Disable-sched_autogroup_enabled-by-default.patch' PKGBUILD
           export OLD=$(sha256sum 0005-o3-optimization.patch | awk '{ print $1}')
           curl -L https://raw.githubusercontent.com/Frogging-Family/linux-tkg/master/linux-tkg-patches/6.5/0013-optimize_harder_O3.patch -o 0005-o3-optimization.patch
           export NEW=$(sha256sum 0005-o3-optimization.patch | awk '{ print $1}')
