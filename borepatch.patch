@@ -1,0 +1,20 @@
+--- 0001-bore.patch.orig	2023-10-22 09:55:35.271122509 +0900
++++ 0001-bore.patch	2023-10-22 09:56:18.845220234 +0900
+@@ -104,14 +104,15 @@
+ index 991fc90025..fdeb340173 100644
+ --- a/kernel/sched/autogroup.c
+ +++ b/kernel/sched/autogroup.c
+-@@ -4,7 +4,11 @@
++@@ -4,8 +4,12 @@
+   * Auto-group scheduling implementation:
+   */
+  
+ +#ifdef CONFIG_SCHED_BORE
+ +unsigned int __read_mostly sysctl_sched_autogroup_enabled = 0;
+ +#else // CONFIG_SCHED_BORE
+- unsigned int __read_mostly sysctl_sched_autogroup_enabled = 1;
++ unsigned int __read_mostly sysctl_sched_autogroup_enabled =
++ 		IS_ENABLED(CONFIG_SCHED_AUTOGROUP_DEFAULT_ENABLED) ? 1 : 0;
+ +#endif // CONFIG_SCHED_BORE
+  static struct autogroup autogroup_default;
+  static atomic_t autogroup_seq_nr;
