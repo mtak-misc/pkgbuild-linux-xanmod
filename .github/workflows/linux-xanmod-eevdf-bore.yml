@@ -38,7 +38,8 @@ jobs:
           export NEW=$(sha256sum 0005-o3-optimization.patch | awk '{ print $1}')
           echo "sed -i 's/${OLD}/${NEW}/g' PKGBUILD" | bash
           export OLD=$(sha256sum 0001-bore.patch | awk '{ print $1}')
-          curl -L https://raw.githubusercontent.com/firelzrd/bore-scheduler/main/patches/linux-6.5-eevdf-bore/0002-linux6.5.y-eevdf-bore3.2.5.patch -o 0001-bore.patch 
+          curl -L https://raw.githubusercontent.com/firelzrd/bore-scheduler/main/patches/linux-6.5-eevdf-bore/0002-linux6.5.y-eevdf-bore3.2.6.patch -o 0001-bore.patch 
+          patch -N -i ../borepatch.patch
           export NEW=$(sha256sum 0001-bore.patch | awk '{ print $1}')
           echo "sed -i 's/${OLD}/${NEW}/g' PKGBUILD" | bash
           sed -i '/0002-constgran-vanilla-max/d' PKGBUILD
@@ -58,7 +59,6 @@ jobs:
 #          echo "sed -i 's/${OLD}/${NEW}/g' PKGBUILD" | bash
 #          sed -i 's/_major=6.4/_major=6.5/g' PKGBUILD
 #          sed -i 's/releases\/main/releases\edge/g' PKGBUILD
-#          patch -N -i ../borepatch.patch
       - name: Build
         run: |
           cd linux-xanmod-bore
