@@ -33,12 +33,13 @@ jobs:
           patch -N -i ../eevdfpatch.patch 
           sed -i '/echo "Setting version..."/i \ \ patch -Np1 -i ../../0001-EEVDF.patch' PKGBUILD
           sed -i '/echo "Setting version..."/i \ \ patch -Np1 -i ../../../fair.patch' PKGBUILD
+          sed -i '/echo "Setting version..."/i \ \ patch -Np1 -i ../../../pick_last_entity.patch' PKGBUILD
           export OLD=$(sha256sum 0005-o3-optimization.patch | awk '{ print $1}')
           curl -L https://raw.githubusercontent.com/Frogging-Family/linux-tkg/master/linux-tkg-patches/6.5/0013-optimize_harder_O3.patch -o 0005-o3-optimization.patch
           export NEW=$(sha256sum 0005-o3-optimization.patch | awk '{ print $1}')
           echo "sed -i 's/${OLD}/${NEW}/g' PKGBUILD" | bash
           export OLD=$(sha256sum 0001-bore.patch | awk '{ print $1}')
-          curl -L https://raw.githubusercontent.com/firelzrd/bore-scheduler/9e175253c03ac13cc493b728a3ee1637bdc15950/patches/linux-6.5-eevdf-bore/0002-linux6.5.y-eevdf-bore3.2.8.patch -o 0001-bore.patch 
+          curl -L https://github.com/firelzrd/bore-scheduler/raw/main/patches/linux-6.5-eevdf-bore/0002-linux6.5.y-eevdf-bore3.2.9.patch -o 0001-bore.patch 
           patch -N -i ../borepatch.patch
           export NEW=$(sha256sum 0001-bore.patch | awk '{ print $1}')
           echo "sed -i 's/${OLD}/${NEW}/g' PKGBUILD" | bash
@@ -52,6 +53,7 @@ jobs:
           export OLD=$(sha256sum patch-6.5.8-xanmod1.xz | awk '{ print $1}')
           echo "sed -i 's/${OLD}/${NEW}/g' PKGBUILD" | bash
           sed -i 's/pkgver=${_major}.8/pkgver=${_major}.9/g' PKGBUILD
+#          curl -L https://raw.githubusercontent.com/firelzrd/bore-scheduler/9e175253c03ac13cc493b728a3ee1637bdc15950/patches/linux-6.5-eevdf-bore/0002-linux6.5.y-eevdf-bore3.2.8.patch -o 0001-bore.patch 
 #          curl -LO https://cdn.kernel.org/pub/linux/kernel/v6.x/linux-6.4.tar.xz
 #          export OLD=$(sha256sum linux-6.4.tar.xz | awk '{ print $1}')
 #          curl -LO https://cdn.kernel.org/pub/linux/kernel/v6.x/linux-6.5.tar.xz
