@@ -5,7 +5,7 @@
  --- a/kernel/sched/autogroup.c
  +++ b/kernel/sched/autogroup.c
 -@@ -4,7 +4,11 @@
-+@@ -4,8 +4,12 @@
++@@ -4,7 +4,12 @@
    * Auto-group scheduling implementation:
    */
   
