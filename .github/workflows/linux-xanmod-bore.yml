@@ -29,12 +29,6 @@ jobs:
       - name: Apply patches
         run: |
           cd linux-xanmod-bore
-          curl -LO https://sourceforge.net/projects/xanmod/files/releases/main/6.4.12-xanmod1/patch-6.4.12-xanmod1.xz
-          export NEW=$(sha256sum patch-6.4.12-xanmod1.xz | awk '{ print $1}')
-          curl -LO https://sourceforge.net/projects/xanmod/files/releases/main/6.4.11-xanmod1/patch-6.4.11-xanmod1.xz
-          export OLD=$(sha256sum patch-6.4.11-xanmod1.xz | awk '{ print $1}')
-          echo "sed -i 's/${OLD}/${NEW}/g' PKGBUILD" | bash
-          sed -i 's/pkgver=${_major}.11/pkgver=${_major}.12/g' PKGBUILD
 #          export OLD=$(sha256sum 0001-bore.patch | awk '{ print $1}')
 #          curl -L https://github.com/firelzrd/bore-scheduler/raw/main/bore-stable/0001-linux6.4.y-bore3.1.2.patch -o 0001-bore.patch
 #          patch -N -i ../borepatch.patch 
