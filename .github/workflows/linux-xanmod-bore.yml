@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
 
 env:
-  PKGDEST: "/tmp/linux-xanmod-bore"
+  PKGDEST: "/tmp/linux-xanmod-eevdf-bore"
 
 jobs:
   build:
@@ -17,7 +17,7 @@ jobs:
         uses: actions/checkout@v3
         with: 
           repository: micros24/linux-xanmod-bore
-          ref: 6.4
+          ref: 6.5
           path: linux-xanmod-bore
       - name: Prepare for makepkg
         run: |
@@ -29,11 +29,37 @@ jobs:
       - name: Apply patches
         run: |
           cd linux-xanmod-bore
-#          export OLD=$(sha256sum 0001-bore.patch | awk '{ print $1}')
-#          curl -L https://github.com/firelzrd/bore-scheduler/raw/main/bore-stable/0001-linux6.4.y-bore3.1.2.patch -o 0001-bore.patch
-#          patch -N -i ../borepatch.patch 
-#          export NEW=$(sha256sum 0001-bore.patch | awk '{ print $1}')
+          sed -i '/echo "Setting version..."/i \ \ patch -Np1 -i ../../../fair.patch' PKGBUILD
+          export OLD=$(sha256sum 0005-o3-optimization.patch | awk '{ print $1}')
+          curl -L https://raw.githubusercontent.com/Frogging-Family/linux-tkg/master/linux-tkg-patches/6.6/0013-optimize_harder_O3.patch -o 0005-o3-optimization.patch
+          export NEW=$(sha256sum 0005-o3-optimization.patch | awk '{ print $1}')
+          echo "sed -i 's/${OLD}/${NEW}/g' PKGBUILD" | bash
+          export OLD=$(sha256sum 0001-bore.patch | awk '{ print $1}')
+          curl -L https://github.com/firelzrd/bore-scheduler/raw/main/patches/linux-6.6-bore/0001-linux6.6.y-bore3.2.9.patch -o 0001-bore.patch 
+          patch -N -i ../borepatch.patch
+          export NEW=$(sha256sum 0001-bore.patch | awk '{ print $1}')
+          echo "sed -i 's/${OLD}/${NEW}/g' PKGBUILD" | bash
+          sed -i '/0002-constgran-vanilla-max/d' PKGBUILD
+          sed -i '/0003-glitched-cfs/d' PKGBUILD
+          sed -i '/0004-glitched-cfs-additions/d' PKGBUILD
+          sed -i 's/pkgbase=linux-xanmod-bore/pkgbase=linux-xanmod-bore/g' PKGBUILD
+          curl -LO https://cdn.kernel.org/pub/linux/kernel/v6.x/linux-6.5.tar.xz
+          export OLD=$(sha256sum linux-6.5.tar.xz | awk '{ print $1}')
+          curl -LO https://cdn.kernel.org/pub/linux/kernel/v6.x/linux-6.6.tar.xz
+          export NEW=$(sha256sum linux-6.6.tar.xz | awk '{ print $1}')
+          echo "sed -i 's/${OLD}/${NEW}/g' PKGBUILD" | bash
+          sed -i 's/_major=6.5/_major=6.6/g' PKGBUILD
+          sed -i 's/releases\/main/releases\edge/g' PKGBUILD
+#          curl -LO https://github.com/firelzrd/bore-scheduler/raw/main/patches/linux-6.5-eevdf-bore/0001-EEVDF.patch
+#          patch -N -i ../eevdfpatch.patch 
+#          sed -i '/echo "Setting version..."/i \ \ patch -Np1 -i ../../0001-EEVDF.patch' PKGBUILD
+#          curl -LO https://sourceforge.net/projects/xanmod/files/releases/main/6.5.9-xanmod1/patch-6.5.9-xanmod1.xz
+#          export NEW=$(sha256sum patch-6.5.9-xanmod1.xz | awk '{ print $1}')
+#          curl -LO https://sourceforge.net/projects/xanmod/files/releases/main/6.5.8-xanmod1/patch-6.5.8-xanmod1.xz
+#          export OLD=$(sha256sum patch-6.5.8-xanmod1.xz | awk '{ print $1}')
 #          echo "sed -i 's/${OLD}/${NEW}/g' PKGBUILD" | bash
+#          sed -i 's/pkgver=${_major}.9/pkgver=${_major}.0/g' PKGBUILD
+#          curl -L https://raw.githubusercontent.com/firelzrd/bore-scheduler/9e175253c03ac13cc493b728a3ee1637bdc15950/patches/linux-6.5-eevdf-bore/0002-linux6.5.y-eevdf-bore3.2.8.patch -o 0001-bore.patch 
       - name: Build
         run: |
           cd linux-xanmod-bore
@@ -41,6 +67,6 @@ jobs:
 #          su builder -c "yes '' | makepkg --noconfirm -sc"
       - uses: actions/upload-artifact@v3
         with:
-          name: linux-xanmod-bore
+          name: linux-xanmod-eevdf-bore
           path: ${{ env.PKGDEST }}/*.pkg.tar.zst
         
