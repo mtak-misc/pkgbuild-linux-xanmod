@@ -56,6 +56,7 @@ jobs:
           curl -LO https://sourceforge.net/projects/xanmod/files/releases/main/6.5.9-xanmod1/patch-6.5.9-xanmod1.xz
           export OLD=$(sha256sum patch-6.5.9-xanmod1.xz | awk '{ print $1}')
           echo "sed -i 's/${OLD}/${NEW}/g' PKGBUILD" | bash
+          sed -i 's/rm "$_modulesdir"/rm -f "$_modulesdir"/g' PKGBUILD
 #          curl -LO https://github.com/firelzrd/bore-scheduler/raw/main/patches/linux-6.5-eevdf-bore/0001-EEVDF.patch
 #          patch -N -i ../eevdfpatch.patch 
 #          sed -i '/echo "Setting version..."/i \ \ patch -Np1 -i ../../0001-EEVDF.patch' PKGBUILD
