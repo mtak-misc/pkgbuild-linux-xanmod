@@ -39,6 +39,9 @@ jobs:
           patch -N -i ../borepatch.patch
           export NEW=$(sha256sum 0001-bore.patch | awk '{ print $1}')
           echo "sed -i 's/${OLD}/${NEW}/g' PKGBUILD" | bash
+          sed -i '/patch-${pkgver}-xanmod${xanmod}.xz/d' PKGBUILD
+          sed -i '/# xanmod patch/d' PKGBUILD
+          sed -i '/patch -Np1 -i/d' PKGBUILD
           sed -i '/0002-constgran-vanilla-max/d' PKGBUILD
           sed -i '/0003-glitched-cfs/d' PKGBUILD
           sed -i '/0004-glitched-cfs-additions/d' PKGBUILD
