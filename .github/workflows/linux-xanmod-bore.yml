@@ -50,7 +50,7 @@ jobs:
           echo "sed -i 's/${OLD}/${NEW}/g' PKGBUILD" | bash
           sed -i 's/_major=6.5/_major=6.6/g' PKGBUILD
           sed -i 's/files\/releases\/main/releases\/edge/g' PKGBUILD
-          sed -i 's/sourceforge.net/master.dl.sourceforge.net/g' PKGBUILD
+          sed -i 's/sourceforge.net\/projects/master.dl.sourceforge.net\/project/g' PKGBUILD
           sed -i 's/pkgver=${_major}.9/pkgver=${_major}.0/g' PKGBUILD
 #          curl -LO https://github.com/firelzrd/bore-scheduler/raw/main/patches/linux-6.5-eevdf-bore/0001-EEVDF.patch
 #          patch -N -i ../eevdfpatch.patch 
