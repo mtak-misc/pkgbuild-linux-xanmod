@@ -29,7 +29,6 @@ jobs:
       - name: Apply patches
         run: |
           cd linux-xanmod-bore
-          sed -i '/patch -Np1 -i/d' PKGBUILD
           sed -i '/echo "Setting version..."/i \ \ patch -Np1 -i ../../../fair.patch' PKGBUILD
           export OLD=$(sha256sum 0005-o3-optimization.patch | awk '{ print $1}')
           curl -L https://raw.githubusercontent.com/Frogging-Family/linux-tkg/master/linux-tkg-patches/6.6/0013-optimize_harder_O3.patch -o 0005-o3-optimization.patch
@@ -40,8 +39,6 @@ jobs:
           patch -N -i ../borepatch.patch
           export NEW=$(sha256sum 0001-bore.patch | awk '{ print $1}')
           echo "sed -i 's/${OLD}/${NEW}/g' PKGBUILD" | bash
-          sed -i '/patch-${pkgver}-xanmod${xanmod}.xz/d' PKGBUILD
-          sed -i '/# xanmod patch/d' PKGBUILD
           sed -i '/0002-constgran-vanilla-max/d' PKGBUILD
           sed -i '/0003-glitched-cfs/d' PKGBUILD
           sed -i '/0004-glitched-cfs-additions/d' PKGBUILD
@@ -53,6 +50,7 @@ jobs:
           echo "sed -i 's/${OLD}/${NEW}/g' PKGBUILD" | bash
           sed -i 's/_major=6.5/_major=6.6/g' PKGBUILD
           sed -i 's/releases\/main/releases\edge/g' PKGBUILD
+          sed -i 's/sourceforge.net/master.dl.sourceforge.net/g' PKGBUILD
           sed -i 's/pkgver=${_major}.9/pkgver=${_major}.0/g' PKGBUILD
 #          curl -LO https://github.com/firelzrd/bore-scheduler/raw/main/patches/linux-6.5-eevdf-bore/0001-EEVDF.patch
 #          patch -N -i ../eevdfpatch.patch 
