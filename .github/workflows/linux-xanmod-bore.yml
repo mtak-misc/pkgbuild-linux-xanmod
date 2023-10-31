@@ -29,6 +29,7 @@ jobs:
       - name: Apply patches
         run: |
           cd linux-xanmod-bore
+          sed -i '/patch -Np1 -i/d' PKGBUILD
           sed -i '/echo "Setting version..."/i \ \ patch -Np1 -i ../../../fair.patch' PKGBUILD
           export OLD=$(sha256sum 0005-o3-optimization.patch | awk '{ print $1}')
           curl -L https://raw.githubusercontent.com/Frogging-Family/linux-tkg/master/linux-tkg-patches/6.6/0013-optimize_harder_O3.patch -o 0005-o3-optimization.patch
@@ -41,7 +42,6 @@ jobs:
           echo "sed -i 's/${OLD}/${NEW}/g' PKGBUILD" | bash
           sed -i '/patch-${pkgver}-xanmod${xanmod}.xz/d' PKGBUILD
           sed -i '/# xanmod patch/d' PKGBUILD
-          sed -i '/patch -Np1 -i/d' PKGBUILD
           sed -i '/0002-constgran-vanilla-max/d' PKGBUILD
           sed -i '/0003-glitched-cfs/d' PKGBUILD
           sed -i '/0004-glitched-cfs-additions/d' PKGBUILD
