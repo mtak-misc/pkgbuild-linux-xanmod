@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
 
 env:
-  PKGDEST: "/tmp/linux-xanmod-eevdf-bore"
+  PKGDEST: "/tmp/linux-xanmod-bore"
 
 jobs:
   build:
@@ -67,6 +67,6 @@ jobs:
 #          su builder -c "yes '' | makepkg --noconfirm -sc"
       - uses: actions/upload-artifact@v3
         with:
-          name: linux-xanmod-eevdf-bore
+          name: linux-xanmod-bore
           path: ${{ env.PKGDEST }}/*.pkg.tar.zst
         
