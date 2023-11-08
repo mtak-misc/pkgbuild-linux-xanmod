@@ -50,11 +50,11 @@ jobs:
           sed -i 's/_major=6.5/_major=6.6/g' PKGBUILD
           sed -i 's/files\/releases\/main/releases\/edge/g' PKGBUILD
           sed -i 's/sourceforge.net\/projects/master.dl.sourceforge.net\/project/g' PKGBUILD
-          sed -i 's/pkgver=${_major}.9/pkgver=${_major}.0/g' PKGBUILD
-          curl -LO https://master.dl.sourceforge.net/project/xanmod/releases/edge/6.6.0-xanmod1/patch-6.6.0-xanmod1.xz
-          export NEW=$(sha256sum patch-6.6.0-xanmod1.xz | awk '{ print $1}')
-          curl -LO https://sourceforge.net/projects/xanmod/files/releases/main/6.5.9-xanmod1/patch-6.5.9-xanmod1.xz
-          export OLD=$(sha256sum patch-6.5.9-xanmod1.xz | awk '{ print $1}')
+          sed -i 's/pkgver=${_major}.10/pkgver=${_major}.1/g' PKGBUILD
+          curl -LO https://master.dl.sourceforge.net/project/xanmod/releases/edge/6.6.1-xanmod1/patch-6.6.1-xanmod1.xz
+          export NEW=$(sha256sum patch-6.6.1-xanmod1.xz | awk '{ print $1}')
+          curl -LO https://sourceforge.net/projects/xanmod/files/releases/main/6.5.10-xanmod1/patch-6.5.10-xanmod1.xz
+          export OLD=$(sha256sum patch-6.5.10-xanmod1.xz | awk '{ print $1}')
           echo "sed -i 's/${OLD}/${NEW}/g' PKGBUILD" | bash
           sed -i 's/rm "$_modulesdir"/rm -f "$_modulesdir"/g' PKGBUILD
 #          curl -LO https://github.com/firelzrd/bore-scheduler/raw/main/patches/linux-6.5-eevdf-bore/0001-EEVDF.patch
