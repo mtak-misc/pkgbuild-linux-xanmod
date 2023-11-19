@@ -35,7 +35,7 @@ jobs:
           export NEW=$(sha256sum 0005-o3-optimization.patch | awk '{ print $1}')
           echo "sed -i 's/${OLD}/${NEW}/g' PKGBUILD" | bash
           export OLD=$(sha256sum 0001-bore.patch | awk '{ print $1}')
-          curl -L https://raw.githubusercontent.com/firelzrd/bore-scheduler/main/patches/linux-6.6-bore/0001-linux6.6.y-bore3.4.0.patch -o 0001-bore.patch 
+          curl -L https://raw.githubusercontent.com/firelzrd/bore-scheduler/main/patches/linux-6.6-bore/0001-linux6.6.y-bore3.5.0.patch -o 0001-bore.patch 
           export NEW=$(sha256sum 0001-bore.patch | awk '{ print $1}')
           echo "sed -i 's/${OLD}/${NEW}/g' PKGBUILD" | bash
           sed -i '/0002-constgran-vanilla-max/d' PKGBUILD
