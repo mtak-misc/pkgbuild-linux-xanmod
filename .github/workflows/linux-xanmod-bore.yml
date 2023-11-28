@@ -34,6 +34,12 @@ jobs:
           export NEW=$(sha256sum 0001-bore.patch | awk '{ print $1}')
           echo "sed -i 's/${OLD}/${NEW}/g' PKGBUILD" | bash
           sed -i '/echo "Setting version..."/i \ \ patch -Np1 -i ../../../fair.patch' PKGBUILD
+          curl -LO https://sourceforge.net/projects/xanmod/files/releases/edge/6.6.3-xanmod1/patch-6.6.3-xanmod1.xz
+          export NEW=$(sha256sum patch-6.6.2-xanmod1.xz | awk '{ print $1}')
+          curl -LO https://sourceforge.net/projects/xanmod/files/releases/edge/6.6.2-xanmod1/patch-6.6.2-xanmod1.xz
+          export OLD=$(sha256sum patch-6.5.11-xanmod1.xz | awk '{ print $1}')
+          echo "sed -i 's/${OLD}/${NEW}/g' PKGBUILD" | bash
+          sed -i 's/pkgver=${_major}.2/pkgver=${_major}.3/g' PKGBUILD
 #          export OLD=$(sha256sum 0005-o3-optimization.patch | awk '{ print $1}')
 #          curl -L https://raw.githubusercontent.com/Frogging-Family/linux-tkg/master/linux-tkg-patches/6.6/0013-optimize_harder_O3.patch -o 0005-o3-optimization.patch
 #          export NEW=$(sha256sum 0005-o3-optimization.patch | awk '{ print $1}')
@@ -53,12 +59,6 @@ jobs:
 #          sed -i 's/_major=6.5/_major=6.6/g' PKGBUILD
 #          sed -i 's/files\/releases\/main/releases\/edge/g' PKGBUILD
 #          sed -i 's/sourceforge.net\/projects/master.dl.sourceforge.net\/project/g' PKGBUILD
-#          sed -i 's/pkgver=${_major}.11/pkgver=${_major}.2/g' PKGBUILD
-#          curl -LO https://master.dl.sourceforge.net/project/xanmod/releases/edge/6.6.2-xanmod1/patch-6.6.2-xanmod1.xz
-#          export NEW=$(sha256sum patch-6.6.2-xanmod1.xz | awk '{ print $1}')
-#           curl -LO https://sourceforge.net/projects/xanmod/files/releases/main/6.5.11-xanmod1/patch-6.5.11-xanmod1.xz
-#          export OLD=$(sha256sum patch-6.5.11-xanmod1.xz | awk '{ print $1}')
-#          echo "sed -i 's/${OLD}/${NEW}/g' PKGBUILD" | bash
 #          sed -i 's/rm "$_modulesdir"/rm -f "$_modulesdir"/g' PKGBUILD
 #          curl -LO https://github.com/firelzrd/bore-scheduler/raw/main/patches/linux-6.5-eevdf-bore/0001-EEVDF.patch
 #          patch -N -i ../eevdfpatch.patch 
