@@ -26,14 +26,14 @@ jobs:
           chown builder -R ..
           chown builder -R /tmp
           su builder -c "gpg --recv 38DBBDC86092693E"
-#      - name: Apply patches
-#        run: |
-#          cd linux-xanmod-bore
-#          export OLD=$(sha256sum 0001-bore.patch | awk '{ print $1}')
-#          curl -L https://raw.githubusercontent.com/firelzrd/bore-scheduler/main/patches/linux-6.6-bore/0001-linux6.6.y-bore3.5.3.patch -o 0001-bore.patch 
-#          export NEW=$(sha256sum 0001-bore.patch | awk '{ print $1}')
-#          echo "sed -i 's/${OLD}/${NEW}/g' PKGBUILD" | bash
-#          sed -i '/echo "Setting version..."/i \ \ patch -Np1 -i ../../../fair.patch' PKGBUILD
+      - name: Apply patches
+        run: |
+          cd linux-xanmod-bore
+          export OLD=$(sha256sum 0001-bore.patch | awk '{ print $1}')
+          curl -L https://raw.githubusercontent.com/firelzrd/bore-scheduler/main/patches/linux-6.6-bore/0001-linux6.6.y-bore3.5.4.patch -o 0001-bore.patch 
+          export NEW=$(sha256sum 0001-bore.patch | awk '{ print $1}')
+          echo "sed -i 's/${OLD}/${NEW}/g' PKGBUILD" | bash
+          sed -i '/echo "Setting version..."/i \ \ patch -Np1 -i ../../../fair.patch' PKGBUILD
 #          curl -LO https://sourceforge.net/projects/xanmod/files/releases/edge/6.6.3-xanmod1/patch-6.6.3-xanmod1.xz
 #          export NEW=$(sha256sum patch-6.6.3-xanmod1.xz | awk '{ print $1}')
 #          curl -LO https://sourceforge.net/projects/xanmod/files/releases/edge/6.6.2-xanmod1/patch-6.6.2-xanmod1.xz
