@@ -40,6 +40,7 @@ jobs:
           export OLD=$(sha256sum patch-6.6.3-xanmod1.xz | awk '{ print $1}')
           echo "sed -i 's/${OLD}/${NEW}/g' PKGBUILD" | bash
           sed -i 's/pkgver=${_major}.3/pkgver=${_major}.4/g' PKGBUILD
+          sed -i 's/releases\/edge/releases\/main/g' PKGBUILD
 #          export OLD=$(sha256sum 0005-o3-optimization.patch | awk '{ print $1}')
 #          curl -L https://raw.githubusercontent.com/Frogging-Family/linux-tkg/master/linux-tkg-patches/6.6/0013-optimize_harder_O3.patch -o 0005-o3-optimization.patch
 #          export NEW=$(sha256sum 0005-o3-optimization.patch | awk '{ print $1}')
@@ -57,7 +58,6 @@ jobs:
 #          export NEW=$(sha256sum linux-6.6.tar.xz | awk '{ print $1}')
 #          echo "sed -i 's/${OLD}/${NEW}/g' PKGBUILD" | bash
 #          sed -i 's/_major=6.5/_major=6.6/g' PKGBUILD
-#          sed -i 's/files\/releases\/main/releases\/edge/g' PKGBUILD
 #          sed -i 's/sourceforge.net\/projects/master.dl.sourceforge.net\/project/g' PKGBUILD
 #          sed -i 's/rm "$_modulesdir"/rm -f "$_modulesdir"/g' PKGBUILD
 #          curl -LO https://github.com/firelzrd/bore-scheduler/raw/main/patches/linux-6.5-eevdf-bore/0001-EEVDF.patch
