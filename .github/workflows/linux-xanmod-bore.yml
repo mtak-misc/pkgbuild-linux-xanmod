@@ -40,7 +40,7 @@ jobs:
           export OLD=$(sha256sum patch-6.6.3-xanmod1.xz | awk '{ print $1}')
           echo "sed -i 's/${OLD}/${NEW}/g' PKGBUILD" | bash
           sed -i 's/pkgver=${_major}.3/pkgver=${_major}.4/g' PKGBUILD
-          sed -i 's/releases\/edge/releases\/main/g' PKGBUILD
+#          sed -i 's/releases\/edge/releases\/main/g' PKGBUILD
 #          export OLD=$(sha256sum 0005-o3-optimization.patch | awk '{ print $1}')
 #          curl -L https://raw.githubusercontent.com/Frogging-Family/linux-tkg/master/linux-tkg-patches/6.6/0013-optimize_harder_O3.patch -o 0005-o3-optimization.patch
 #          export NEW=$(sha256sum 0005-o3-optimization.patch | awk '{ print $1}')
