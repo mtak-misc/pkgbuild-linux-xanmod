@@ -34,7 +34,7 @@ jobs:
           export NEW=$(sha256sum 0001-bore.patch | awk '{ print $1}')
           echo "sed -i 's/${OLD}/${NEW}/g' PKGBUILD" | bash
           sed -i '/echo "Setting version..."/i \ \ patch -Np1 -i ../../../fair.patch' PKGBUILD
-          curl -LO https://sourceforge.net/projects/xanmod/files/releases/edge/6.6.4-xanmod1/patch-6.6.4-xanmod1.xz
+          curl -LO https://sourceforge.net/projects/xanmod/files/releases/main/6.6.4-xanmod1/patch-6.6.4-xanmod1.xz
           export NEW=$(sha256sum patch-6.6.4-xanmod1.xz | awk '{ print $1}')
           curl -LO https://sourceforge.net/projects/xanmod/files/releases/edge/6.6.3-xanmod1/patch-6.6.3-xanmod1.xz
           export OLD=$(sha256sum patch-6.6.3-xanmod1.xz | awk '{ print $1}')
