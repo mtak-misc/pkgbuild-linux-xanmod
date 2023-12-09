@@ -31,7 +31,7 @@ jobs:
           chown builder -R /tmp
           su builder -c "gpg --recv 38DBBDC86092693E"
       - name: Apply patches
-        if: ${{ github.event.inputs.apply_patch }}
+        if: ${{ github.event.inputs.apply_patch == 'true' }}
         run: |
           cd linux-xanmod-bore
           export OLD=$(sha256sum 0001-bore.patch | awk '{ print $1}')
