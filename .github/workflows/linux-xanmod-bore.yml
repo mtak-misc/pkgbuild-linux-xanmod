@@ -2,7 +2,11 @@ name: build-linux-xanmod-bore
 
 on:
   workflow_dispatch:
-
+    inputs:
+      apply_patch:
+        type: boolean
+        required: true
+        description: "Apply patch flag"
 env:
   PKGDEST: "/tmp/linux-xanmod-bore"
 
@@ -27,7 +31,7 @@ jobs:
           chown builder -R /tmp
           su builder -c "gpg --recv 38DBBDC86092693E"
       - name: Apply patches
-        if: ${{ true }}
+        if: ${{ github.event.inputs.apply_patch }}
         run: |
           cd linux-xanmod-bore
           export OLD=$(sha256sum 0001-bore.patch | awk '{ print $1}')
