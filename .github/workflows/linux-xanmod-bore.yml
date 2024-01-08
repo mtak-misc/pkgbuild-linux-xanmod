@@ -43,7 +43,7 @@ jobs:
         if: ${{ github.event.inputs.apply_patch == 'true' }}
         run: |
           cd linux-xanmod-bore
-          sed -i '/# Applying configuration/a \ \ scripts/conifg --enable CONFIG_MODULE_COMPRESS_ZSTD' PKGBUILD
+          sed -i '/# Setting HZ tick rate/a \ \ scripts/conifg --enable CONFIG_MODULE_COMPRESS_ZSTD' PKGBUILD
           if [ "${{ github.event.inputs.new_bore_ver }}" != "" ]; then
             export OLD=$(sha256sum 0001-bore.patch | awk '{ print $1}')
             curl -L https://raw.githubusercontent.com/firelzrd/bore-scheduler/main/patches/linux-6.6-bore/0001-linux6.6.y-bore${{ github.event.inputs.new_bore_ver }}.patch -o 0001-bore.patch 
