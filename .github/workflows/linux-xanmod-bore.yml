@@ -62,7 +62,7 @@ jobs:
             echo "sed -i 's/${OLD}/${NEW}/g' PKGBUILD" | bash
             echo "sed -i 's/pkgver=\${_major}."${OLDVERSION}"/pkgver=\${_major}."${{ github.event.inputs.new_kernel_ver }}"/g' PKGBUILD" | bash
             sed -i 's/_major=6.6/_major=6.7/g' PKGBUILD
-            sed -i 's/sourceforge.net\/projects\/xanmod\/files\/releases\/master.dl.sourceforge.net\/project\/xanmod\/releases\/edge/g' PKGBUILD
+            sed -i 's/sourceforge.net\/projects\/xanmod\/files\/releases\/main/master.dl.sourceforge.net\/project\/xanmod\/releases\/edge/g' PKGBUILD
           fi
 #          sed -i 's/releases\/edge/releases\/main/g' PKGBUILD
 #          export OLD=$(sha256sum 0005-o3-optimization.patch | awk '{ print $1}')
