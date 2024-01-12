@@ -43,6 +43,7 @@ jobs:
         if: ${{ github.event.inputs.apply_patch == 'true' }}
         run: |
           cd linux-xanmod-bore
+          sed -i '/# Setting HZ tick rate/a \ \ scripts/config --disable CONFIG_DRM_NOUVEAU' PKGBUILD
           sed -i '/# Setting HZ tick rate/a \ \ scripts/config --enable CONFIG_MODULE_COMPRESS_ZSTD' PKGBUILD
           if [ "${{ github.event.inputs.new_bore_ver }}" != "" ]; then
             export OLD=$(sha256sum 0001-bore.patch | awk '{ print $1}')
