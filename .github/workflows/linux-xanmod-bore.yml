@@ -43,7 +43,6 @@ jobs:
         if: ${{ github.event.inputs.apply_patch == 'true' }}
         run: |
           cd linux-xanmod-bore
-          sed -i '/# Setting HZ tick rate/a \ \ scripts/config --disable CONFIG_DRM_NOUVEAU' PKGBUILD
           sed -i '/# Setting HZ tick rate/a \ \ scripts/config --enable CONFIG_MODULE_COMPRESS_ZSTD' PKGBUILD
           if [ "${{ github.event.inputs.new_bore_ver }}" != "" ]; then
             export OLD=$(sha256sum 0001-bore.patch | awk '{ print $1}')
@@ -74,6 +73,7 @@ jobs:
             export NEW=$(sha256sum 0002-o3-optimization.patch | awk '{ print $1}')
             echo "sed -i 's/${OLD}/${NEW}/g' PKGBUILD" | bash
           fi
+#          sed -i '/# Setting HZ tick rate/a \ \ scripts/config --disable CONFIG_DRM_NOUVEAU' PKGBUILD
 #          sed -i 's/releases\/edge/releases\/main/g' PKGBUILD
 #          export OLD=$(sha256sum 0005-o3-optimization.patch | awk '{ print $1}')
 #          curl -L https://raw.githubusercontent.com/Frogging-Family/linux-tkg/master/linux-tkg-patches/6.6/0013-optimize_harder_O3.patch -o 0005-o3-optimization.patch
