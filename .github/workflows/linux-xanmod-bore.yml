@@ -43,6 +43,9 @@ jobs:
         if: ${{ github.event.inputs.apply_patch == 'true' }}
         run: |
           cd linux-xanmod-bore
+          sed -i '/echo "Installing modules..."/a \ \ \ \ DEPMOD=/doesnt/exist modules_install  # Suppress depmod' PKGBUILD
+          sed -i '/echo "Installing modules..."/a \ \ ZSTD_CLEVEL=19 make INSTALL_MOD_PATH="$pkgdir/usr" INSTALL_MOD_STRIP=1 \\' PKGBUILD
+          sed -i 's/make INSTALL_MOD_PATH/# make INSTALL_MOD_PATH/g' PKGBUILD
           sed -i '/# Setting HZ tick rate/a \ \ scripts/config --enable CONFIG_MODULE_COMPRESS_ZSTD' PKGBUILD
           if [ "${{ github.event.inputs.new_bore_ver }}" != "" ]; then
             export OLD=$(sha256sum 0001-bore.patch | awk '{ print $1}')
