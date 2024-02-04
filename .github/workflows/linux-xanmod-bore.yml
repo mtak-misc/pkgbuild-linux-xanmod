@@ -30,7 +30,7 @@ jobs:
         uses: actions/checkout@v4
         with: 
           repository: micros24/linux-xanmod-bore
-          ref: 6.6
+          ref: 6.7
           path: linux-xanmod-bore
       - name: Prepare for makepkg
         run: |
@@ -56,25 +56,24 @@ jobs:
           PKGVERSION=$(grep "pkgver=" PKGBUILD)
           OLDVERSION="${PKGVERSION#*"."}"
           if [ "${{ github.event.inputs.new_kernel_ver }}" != "" ] && [ "${{ github.event.inputs.new_kernel_ver }}" != ${OLDVERSION} ]; then
-            curl -LO https://sourceforge.net/projects/xanmod/files/releases/main/6.6.${{ github.event.inputs.new_kernel_ver }}-xanmod1/patch-6.6.${{ github.event.inputs.new_kernel_ver }}-xanmod1.xz
             curl -LO https://master.dl.sourceforge.net/project/xanmod/releases/edge/6.7.${{ github.event.inputs.new_kernel_ver }}-xanmod1/patch-6.7.${{ github.event.inputs.new_kernel_ver }}-xanmod1.xz
             export NEW=$(sha256sum patch-6.7.${{ github.event.inputs.new_kernel_ver }}-xanmod1.xz | awk '{ print $1}')
-            curl -LO https://sourceforge.net/projects/xanmod/files/releases/main/6.6.${OLDVERSION}-xanmod1/patch-6.6.${OLDVERSION}-xanmod1.xz
-            export OLD=$(sha256sum patch-6.6.${OLDVERSION}-xanmod1.xz | awk '{ print $1}')
+            curl -LO https://sourceforge.net/projects/xanmod/files/releases/main/6.7.${OLDVERSION}-xanmod1/patch-6.7.${OLDVERSION}-xanmod1.xz
+            export OLD=$(sha256sum patch-6.7.${OLDVERSION}-xanmod1.xz | awk '{ print $1}')
             echo "sed -i 's/${OLD}/${NEW}/g' PKGBUILD" | bash
             echo "sed -i 's/pkgver=\${_major}."${OLDVERSION}"/pkgver=\${_major}."${{ github.event.inputs.new_kernel_ver }}"/g' PKGBUILD" | bash
-            sed -i 's/_major=6.6/_major=6.7/g' PKGBUILD
-            sed -i 's/sourceforge.net\/projects\/xanmod\/files\/releases\/main/master.dl.sourceforge.net\/project\/xanmod\/releases\/edge/g' PKGBUILD
-            curl -LO https://cdn.kernel.org/pub/linux/kernel/v6.x/linux-6.6.tar.xz
-            export OLD=$(sha256sum linux-6.6.tar.xz | awk '{ print $1}')
-            curl -LO https://cdn.kernel.org/pub/linux/kernel/v6.x/linux-6.7.tar.xz
-            export NEW=$(sha256sum linux-6.7.tar.xz | awk '{ print $1}')
-            echo "sed -i 's/${OLD}/${NEW}/g' PKGBUILD" | bash
-            export OLD=$(sha256sum 0002-o3-optimization.patch | awk '{ print $1}')
-            curl -L https://github.com/Frogging-Family/linux-tkg/raw/master/linux-tkg-patches/6.7/0013-optimize_harder_O3.patch -o 0002-o3-optimization.patch
-            export NEW=$(sha256sum 0002-o3-optimization.patch | awk '{ print $1}')
-            echo "sed -i 's/${OLD}/${NEW}/g' PKGBUILD" | bash
           fi
+#            export OLD=$(sha256sum 0002-o3-optimization.patch | awk '{ print $1}')
+#            curl -L https://github.com/Frogging-Family/linux-tkg/raw/master/linux-tkg-patches/6.7/0013-optimize_harder_O3.patch -o 0002-o3-optimization.patch
+#            export NEW=$(sha256sum 0002-o3-optimization.patch | awk '{ print $1}')
+#            echo "sed -i 's/${OLD}/${NEW}/g' PKGBUILD" | bash
+#            curl -LO https://cdn.kernel.org/pub/linux/kernel/v6.x/linux-6.6.tar.xz
+#            export OLD=$(sha256sum linux-6.6.tar.xz | awk '{ print $1}')
+#            curl -LO https://cdn.kernel.org/pub/linux/kernel/v6.x/linux-6.7.tar.xz
+#            export NEW=$(sha256sum linux-6.7.tar.xz | awk '{ print $1}')
+#            echo "sed -i 's/${OLD}/${NEW}/g' PKGBUILD" | bash
+#          sed -i 's/sourceforge.net\/projects\/xanmod\/files\/releases\/main/master.dl.sourceforge.net\/project\/xanmod\/releases\/edge/g' PKGBUILD
+#          curl -LO https://sourceforge.net/projects/xanmod/files/releases/main/6.6.${{ github.event.inputs.new_kernel_ver }}-xanmod1/patch-6.6.${{ github.event.inputs.new_kernel_ver }}-xanmod1.xz
 #          sed -i '/# Setting HZ tick rate/a \ \ scripts/config --disable CONFIG_DRM_NOUVEAU' PKGBUILD
 #          sed -i 's/releases\/edge/releases\/main/g' PKGBUILD
 #          export OLD=$(sha256sum 0005-o3-optimization.patch | awk '{ print $1}')
