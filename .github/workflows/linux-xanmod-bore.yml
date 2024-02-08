@@ -105,7 +105,8 @@ jobs:
           cd linux-xanmod-bore
           su builder -c "yes '' | MAKEFLAGS=\"-j $(nproc)\" env _compress_modules=y _use_numa=y _use_tracers=n makepkg --noconfirm -sc" 
 #          su builder -c "yes '' | makepkg --noconfirm -sc"
-      - uses: actions/upload-artifact@v4
+      - name: Upload packages
+        uses: actions/upload-artifact@v4
         with:
           name: linux-xanmod-bore
           path: ${{ env.PKGDEST }}/*.pkg.tar.zst
