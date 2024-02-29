@@ -46,7 +46,7 @@ jobs:
           sed -i 's/make INSTALL_MOD_PATH/# make INSTALL_MOD_PATH/g' PKGBUILD
           sed -i '/echo "Installing modules..."/a \ \ \ \ DEPMOD=/doesnt/exist modules_install  # Suppress depmod' PKGBUILD
           sed -i '/echo "Installing modules..."/a \ \ ZSTD_CLEVEL=19 make INSTALL_MOD_PATH="$pkgdir/usr" INSTALL_MOD_STRIP=1 \\' PKGBUILD
-          sed -i '/glitched/d' PKGBUILD
+          sed -i '/glitched-eevdf/d' PKGBUILD
           if [ "${{ github.event.inputs.new_bore_ver }}" != "" ]; then
             export OLD=$(sha256sum 0001-bore.patch | awk '{ print $1}')
             curl -L https://raw.githubusercontent.com/firelzrd/bore-scheduler/main/patches/stable/linux-6.7-bore/0001-linux6.7.y-bore${{ github.event.inputs.new_bore_ver }}.patch -o 0001-bore.patch
