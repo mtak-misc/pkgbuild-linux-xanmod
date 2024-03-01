@@ -45,11 +45,14 @@ jobs:
           cd linux-xanmod-bore
           if [ "${{ github.event.inputs.new_bore_ver }}" != "" ]; then
             export OLD=$(sha256sum 0001-bore.patch | awk '{ print $1}')
-            curl -L https://raw.githubusercontent.com/firelzrd/bore-scheduler/main/patches/stable/linux-6.7-bore/0001-linux6.7.y-bore${{ github.event.inputs.new_bore_ver }}.patch -o 0001-bore.patch
+            curl -L https://raw.githubusercontent.com/firelzrd/bore-scheduler/main/patches/stable/linux-6.7-bore/0001-linux6.7.y-bore${{ github.event.inputs.new_bore_ver }}.patch -o 0001-bore.patch.tmp
+            cat ./0001-bore.patch.tmp | sed \
+            -e 's/Adaptive sched.*/Remove energy efficiency functions by Alexandre Frade/' \
+            -e 's/Copyright (C) 2007 Red Hat.*/(C) 2021 Alexandre Frade <kernel@xanmod.org>/' \
+            -e 's/scaling = SCHED_TUNABLESCALING_LOG/scaling = SCHED_TUNABLESCALING_NONE/' \
+            > ./0001-bore.patch
             export NEW=$(sha256sum 0001-bore.patch | awk '{ print $1}')
             echo "sed -i 's/${OLD}/${NEW}/g' PKGBUILD" | bash
-            sed -i '/echo "Setting version..."/i \ \ patch -Np1 -i ../../../fair.patch' PKGBUILD
-            sed -i '/glitched-eevdf/d' PKGBUILD
           fi
           PKGVERSION=$(grep "pkgver=" PKGBUILD)
           OLDVERSION="${PKGVERSION#*"."}"
