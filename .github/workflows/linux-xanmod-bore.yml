@@ -53,6 +53,7 @@ jobs:
             > ./0001-bore.patch
             export NEW=$(sha256sum 0001-bore.patch | awk '{ print $1}')
             echo "sed -i 's/${OLD}/${NEW}/g' PKGBUILD" | bash
+            sed -i '/glitched-eevdf/d' PKGBUILD
           fi
           PKGVERSION=$(grep "pkgver=" PKGBUILD)
           OLDVERSION="${PKGVERSION#*"."}"
