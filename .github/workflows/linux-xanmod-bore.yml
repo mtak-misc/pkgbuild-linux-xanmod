@@ -22,8 +22,73 @@ env:
 jobs:
   build:
     runs-on: ubuntu-latest
-    container: archlinux:latest    
+#    container: archlinux:latest    
     steps:
+      - name: Cleanup
+#        if: ${{ 'true' == 'false' }}
+        run: |
+          docker images
+          sudo rm -rf "/opt/*" || true
+          sudo rm -rf "/usr/share/dotnet" || true
+          sudo rm -rf "$AGENT_TOOLSDIRECTORY" || true
+          sudo rm -rf "/usr/local/lib/android" || true
+          sudo rm -rf "/usr/local/share/boost" || true
+          sudo rm -rf "/usr/lib/jvm" || true
+          sudo rm -rf "/usr/share/swift" || true
+          sudo rm -rf "/usr/local/julia*" || true
+          sudo rm -rf "/usr/share/kotlinc" || true
+          sudo rm -rf "/usr/local/share/edge_driver" || true
+          sudo rm -rf "/usr/local/share/chromedriver-linux64" || true
+          sudo rm -rf "/usr/local/share/gecko_driver" || true
+          sudo rm -rf "/usr/share/miniconda" || true
+          sudo rm -rf "/usr/local/share/phantomjs*" || true
+          sudo rm -rf "/usr/share/sbt" || true
+          sudo rm -rf "/usr/local/sqlpackage" || true
+          docker rmi $(docker image ls -q --filter "reference=node*")
+          docker rmi $(docker image ls -q --filter "reference=debian*")
+          docker rmi $(docker image ls -q --filter "reference=alpine*")
+          docker rmi $(docker image ls -q --filter "reference=ubuntu:20.04")
+          sudo npm uninstall bazel
+          rustup self uninstall -y
+          sudo apt purge \
+            ansible \
+            apache2 \
+            aria2 \
+            azure-cli \
+            cabal* \
+            clang* \
+            dotnet-sdk* \
+            firefox \
+            ghc* \
+            google-chrome-stable \
+            google-cloud-sdk \
+            kubectl \
+            libpq-dev \
+            microsoft-edge-stable \
+            moby-buildx \
+            moby-cli \
+            moby-compose \
+            moby-engine \
+            mongodb* \
+            mono-complete \
+            mysql* \
+            nginx \
+            node* \
+            npm* \
+            nuget \
+            php* \
+            postgresql* \
+            powershell \
+            r-base \
+            rpm \
+            ruby* \
+            sphinxsearch \
+            subversion \
+            yarn \
+            -yq >/dev/null 2>&1 || true
+          sudo apt-get autoremove -y >/dev/null 2>&1 || true
+          sudo apt-get autoclean -y >/dev/null 2>&1 || true
+          df -h
       - name: Checkount repo
         uses: actions/checkout@v4 
       - name: Checkount linux-xanmod-bore repo
@@ -32,13 +97,13 @@ jobs:
           repository: micros24/linux-xanmod-bore
           ref: 6.7
           path: linux-xanmod-bore
-      - name: Prepare for makepkg
-        run: |
-          pacman -Syu --noconfirm base-devel sudo git
-          useradd builder -m -G wheel && echo "builder ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
-          chown builder -R ..
-          chown builder -R /tmp
-          su builder -c "gpg --recv 38DBBDC86092693E"
+#      - name: Prepare for makepkg
+#        run: |
+#          pacman -Syu --noconfirm base-devel sudo git
+#          useradd builder -m -G wheel && echo "builder ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
+#          chown builder -R ..
+#          chown builder -R /tmp
+#          su builder -c "gpg --recv 38DBBDC86092693E"
       - name: Apply patches
         if: ${{ github.event.inputs.apply_patch == 'true' }}
         run: |
@@ -64,6 +129,7 @@ jobs:
             echo "sed -i 's/${OLD}/${NEW}/g' PKGBUILD" | bash
             echo "sed -i 's/pkgver=\${_major}."${OLDVERSION}"/pkgver=\${_major}."${{ github.event.inputs.new_kernel_ver }}"/g' PKGBUILD" | bash
           fi
+          echo "USERID=$(id -u $(whoami))" >> $GITHUB_ENV
 #            export OLD=$(sha256sum 0002-o3-optimization.patch | awk '{ print $1}')
 #            curl -L https://github.com/Frogging-Family/linux-tkg/raw/master/linux-tkg-patches/6.7/0013-optimize_harder_O3.patch -o 0002-o3-optimization.patch
 #            export NEW=$(sha256sum 0002-o3-optimization.patch | awk '{ print $1}')
@@ -101,14 +167,16 @@ jobs:
 #          sed -i '/echo "Setting version..."/i \ \ patch -Np1 -i ../../0001-EEVDF.patch' PKGBUILD
 #          curl -L https://raw.githubusercontent.com/firelzrd/bore-scheduler/9e175253c03ac13cc493b728a3ee1637bdc15950/patches/linux-6.5-eevdf-bore/0002-linux6.5.y-eevdf-bore3.2.8.patch -o 0001-bore.patch 
 #          patch -N -i ../borepatch.patch
+        env: 
+          USERID: ''
       - name: Build
-        run: |
-          cd linux-xanmod-bore
-          su builder -c "yes '' | MAKEFLAGS=\"-j $(nproc)\" env _compress_modules=y _use_numa=y _use_tracers=n makepkg --noconfirm -sc" 
-#          su builder -c "yes '' | makepkg --noconfirm -sc"
+        uses: docker://archlinux:latest
+        with:
+          entrypoint: '/bin/sh'
+          args: ./gcc-build.sh ${{ env.USERID }} 
       - name: Upload packages
         uses: actions/upload-artifact@v4
         with:
           name: linux-xanmod-bore
-          path: ${{ env.PKGDEST }}/*.pkg.tar.zst
+          path: ${{ github.workspace }}/linux-xanmod-bore/*.pkg.tar.zst
         
