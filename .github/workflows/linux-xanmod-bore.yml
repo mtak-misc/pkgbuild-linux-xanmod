@@ -126,9 +126,11 @@ jobs:
             echo "sed -i 's/${OLD}/${NEW}/g' PKGBUILD" | bash
             echo "sed -i 's/pkgver=\${_major}."${OLDVERSION}"/pkgver=\${_major}."${{ github.event.inputs.new_kernel_ver }}"/g' PKGBUILD" | bash
           fi
+      - name: Set UserID
+        run: |
           echo "USERID=$(id -u $(whoami))" >> $GITHUB_ENV
         env: 
-          USERID: ''
+          USERID: ''          
       - name: Build
         uses: docker://archlinux:latest
         with:
