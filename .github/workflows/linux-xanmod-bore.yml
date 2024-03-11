@@ -107,7 +107,7 @@ jobs:
           cd linux-xanmod-bore
           if [ "${{ github.event.inputs.new_bore_ver }}" != "" ]; then
             export OLD=$(sha256sum 0001-bore.patch | awk '{ print $1}')
-            curl -L https://raw.githubusercontent.com/firelzrd/bore-scheduler/main/patches/stable/linux-6.7-bore/0001-linux6.7.y-bore${{ github.event.inputs.new_bore_ver }}.patch -o 0001-bore.patch
+            curl -L https://raw.githubusercontent.com/firelzrd/bore-scheduler/main/patches/stable/linux-6.8-bore/0001-linux6.8.y-bore${{ github.event.inputs.new_bore_ver }}.patch -o 0001-bore.patch
             sed -i \
             -e 's/Adaptive sched.*/Remove energy efficiency functions by Alexandre Frade/' \
             -e 's/Copyright (C) 2007 Red Hat.*/(C) 2021 Alexandre Frade <kernel@xanmod.org>/' \
@@ -119,7 +119,7 @@ jobs:
           PKGVERSION=$(grep "pkgver=" PKGBUILD)
           OLDVERSION="${PKGVERSION#*"."}"
           if [ "${{ github.event.inputs.new_kernel_ver }}" != "" ] && [ "${{ github.event.inputs.new_kernel_ver }}" != ${OLDVERSION} ]; then
-            curl -LO https://sourceforge.net/projects/xanmod/files/releases/main/6.7.${{ github.event.inputs.new_kernel_ver }}-xanmod1/patch-6.7.${{ github.event.inputs.new_kernel_ver }}-xanmod1.xz
+            curl -LO https://master.dl.sourceforge.net/project/xanmod/releases/edge/6.8.${{ github.event.inputs.new_kernel_ver }}-xanmod1/patch-6.8.${{ github.event.inputs.new_kernel_ver }}-xanmod1.xz
             export NEW=$(sha256sum patch-6.7.${{ github.event.inputs.new_kernel_ver }}-xanmod1.xz | awk '{ print $1}')
             curl -LO https://sourceforge.net/projects/xanmod/files/releases/main/6.7.${OLDVERSION}-xanmod1/patch-6.7.${OLDVERSION}-xanmod1.xz
             export OLD=$(sha256sum patch-6.7.${OLDVERSION}-xanmod1.xz | awk '{ print $1}')
