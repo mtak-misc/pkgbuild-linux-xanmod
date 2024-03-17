@@ -118,6 +118,7 @@ jobs:
             export OLD=$(sha256sum patch-6.7.${OLDVERSION}-xanmod1.xz | awk '{ print $1}')
             echo "sed -i 's/${OLD}/${NEW}/g' PKGBUILD" | bash
             echo "sed -i 's/pkgver=\${_major}."${OLDVERSION}"/pkgver=\${_major}."${{ github.event.inputs.new_kernel_ver }}"/g' PKGBUILD" | bash
+         fi
 #            export OLD=$(sha256sum 0004-o3-optimization.patch | awk '{ print $1}')
 #            curl -L https://raw.githubusercontent.com/Frogging-Family/linux-tkg/master/linux-tkg-patches/6.8/0013-optimize_harder_O3.patch -o 0004-o3-optimization.patch
 #            export NEW=$(sha256sum 0004-o3-optimization.patch | awk '{ print $1}')
@@ -128,7 +129,6 @@ jobs:
 #            curl -LO https://cdn.kernel.org/pub/linux/kernel/v6.x/linux-6.7.tar.xz
 #            export OLD=$(sha256sum linux-6.7.tar.xz | awk '{ print $1}')
 #            echo "sed -i 's/${OLD}/${NEW}/g' PKGBUILD" | bash
-          fi
       - name: Set UserID
         run: |
           echo "USERID=$(id -u $(whoami))" >> $GITHUB_ENV
