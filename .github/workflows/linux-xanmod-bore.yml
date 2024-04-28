@@ -111,6 +111,7 @@ jobs:
           fi
           PKGVERSION=$(grep "pkgver=" PKGBUILD)
           OLDVERSION="${PKGVERSION#*"."}"
+          sed -i 's/xanmod=2/xanmod=1/g' PKGBUILD
           if [ "${{ github.event.inputs.new_kernel_ver }}" != "" ] && [ "${{ github.event.inputs.new_kernel_ver }}" != ${OLDVERSION} ]; then
             curl -LO https://sourceforge.net/projects/xanmod/files/releases/main/6.8.${{ github.event.inputs.new_kernel_ver }}-xanmod1/patch-6.8.${{ github.event.inputs.new_kernel_ver }}-xanmod1.xz
             export NEW=$(sha256sum patch-6.8.${{ github.event.inputs.new_kernel_ver }}-xanmod1.xz | awk '{ print $1}')
