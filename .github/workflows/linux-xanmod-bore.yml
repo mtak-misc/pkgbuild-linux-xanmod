@@ -106,6 +106,7 @@ jobs:
             -e 's/Copyright (C) 2007 Red Hat.*/(C) 2021 Alexandre Frade <kernel@xanmod.org>/' \
             -e 's/scaling = SCHED_TUNABLESCALING_LOG/scaling = SCHED_TUNABLESCALING_NONE/' \
             ./0001-bore.patch
+            curl -L https://raw.githubusercontent.com/CachyOS/kernel-patches/master/6.8/sched/0001-bore.patch -o 0001-bore.patch
             export NEW=$(sha256sum 0001-bore.patch | awk '{ print $1}')
             echo "sed -i 's/${OLD}/${NEW}/g' PKGBUILD" | bash
           fi
