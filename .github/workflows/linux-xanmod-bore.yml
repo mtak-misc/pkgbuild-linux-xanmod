@@ -101,12 +101,12 @@ jobs:
           if [ "${{ github.event.inputs.new_bore_ver }}" != "" ]; then
             export OLD=$(sha256sum 0001-bore.patch | awk '{ print $1}')
             curl -L https://raw.githubusercontent.com/firelzrd/bore-scheduler/main/patches/stable/linux-6.8-bore/0001-linux6.8.y-bore${{ github.event.inputs.new_bore_ver }}.patch -o 0001-bore.patch
+            curl -L https://raw.githubusercontent.com/CachyOS/kernel-patches/master/6.8/sched/0001-bore.patch -o 0001-bore.patch
             sed -i \
             -e 's/Adaptive sched.*/Remove energy efficiency functions by Alexandre Frade/' \
             -e 's/Copyright (C) 2007 Red Hat.*/(C) 2021 Alexandre Frade <kernel@xanmod.org>/' \
             -e 's/scaling = SCHED_TUNABLESCALING_LOG/scaling = SCHED_TUNABLESCALING_NONE/' \
             ./0001-bore.patch
-            curl -L https://raw.githubusercontent.com/CachyOS/kernel-patches/master/6.8/sched/0001-bore.patch -o 0001-bore.patch
             export NEW=$(sha256sum 0001-bore.patch | awk '{ print $1}')
             echo "sed -i 's/${OLD}/${NEW}/g' PKGBUILD" | bash
           fi
