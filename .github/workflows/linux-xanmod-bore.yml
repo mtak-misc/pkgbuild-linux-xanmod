@@ -120,8 +120,17 @@ jobs:
             echo "sed -i 's/${OLD}/${NEW}/g' PKGBUILD" | bash
             echo "sed -i 's/pkgver=\${_major}."${OLDVERSION}"/pkgver=\${_major}."${{ github.event.inputs.new_kernel_ver }}"/g' PKGBUILD" | bash
 
+            export OLD=$(sha256sum 0002-glitched-cfs.patch | awk '{ print $1}')
+            curl -L https://github.com/Frogging-Family/linux-tkg/raw/master/linux-tkg-patches/6.9/0003-glitched-cfs.patch -o 0002-glitched-cfs.patch
+            export NEW=$(sha256sum 0002-glitched-cfs.patch | awk '{ print $1}')
+            echo "sed -i 's/${OLD}/${NEW}/g' PKGBUILD" | bash
+            export OLD=$(sha256sum 0003-glitched-eevdf-additions.patch | awk '{ print $1}')
+            curl -LO https://github.com/Frogging-Family/linux-tkg/raw/master/linux-tkg-patches/6.9/0003-glitched-eevdf-additions.patch 
+            export NEW=$(sha256sum 0003-glitched-eevdf-additions.patch | awk '{ print $1}')
+            echo "sed -i 's/${OLD}/${NEW}/g' PKGBUILD" | bash
+
             export OLD=$(sha256sum 0004-o3-optimization.patch | awk '{ print $1}')
-            curl -L https://raw.githubusercontent.com/Frogging-Family/linux-tkg/master/linux-tkg-patches/6.9/0013-optimize_harder_O3.patch -o 0004-o3-optimization.patch
+            curl -L https://github.com/Frogging-Family/linux-tkg/raw/master/linux-tkg-patches/6.9/0013-optimize_harder_O3.patch -o 0004-o3-optimization.patch
             export NEW=$(sha256sum 0004-o3-optimization.patch | awk '{ print $1}')
             echo "sed -i 's/${OLD}/${NEW}/g' PKGBUILD" | bash
             sed -i 's/_major=6.8/_major=6.9/g' PKGBUILD
