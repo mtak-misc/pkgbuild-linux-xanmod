@@ -119,7 +119,7 @@ jobs:
             echo "sed -i 's/${OLD}/${NEW}/g' PKGBUILD" | bash
             echo "sed -i 's/pkgver=\${_major}."${OLDVERSION}"/pkgver=\${_major}."${{ github.event.inputs.new_kernel_ver }}"/g' PKGBUILD" | bash
 
-            export OLD=$(sha256sum 0004-o3-optimization.patch | awk '{ print $1}')
+            export OLD=$(sha256sum 0004-o3-optimization.patch | awk '{ print $1}'
             curl -L https://raw.githubusercontent.com/Frogging-Family/linux-tkg/master/linux-tkg-patches/6.9/0013-optimize_harder_O3.patch -o 0004-o3-optimization.patch
             export NEW=$(sha256sum 0004-o3-optimization.patch | awk '{ print $1}'
           fi
