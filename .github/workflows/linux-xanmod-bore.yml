@@ -122,10 +122,10 @@ jobs:
             export OLD=$(sha256sum 0004-o3-optimization.patch | awk '{ print $1}')
             curl -L https://raw.githubusercontent.com/Frogging-Family/linux-tkg/master/linux-tkg-patches/6.9/0013-optimize_harder_O3.patch -o 0004-o3-optimization.patch
             export NEW=$(sha256sum 0004-o3-optimization.patch | awk '{ print $1}'
-            echo "sed -i 's/${OLD}/${NEW}/g' PKGBUILD" | bash
-            sed -i 's/_major=6.8/_major=6.9/g' PKGBUILD
-            curl -LO https://cdn.kernel.org/pub/linux/kernel/v6.x/linux-6.9.tar.xz
           fi
+#            echo "sed -i 's/${OLD}/${NEW}/g' PKGBUILD" | bash
+#            sed -i 's/_major=6.8/_major=6.9/g' PKGBUILD
+#            curl -LO https://cdn.kernel.org/pub/linux/kernel/v6.x/linux-6.9.tar.xz
 #            export NEW=$(sha256sum linux-6.9.tar.xz | awk '{ print $1}')
 #            curl -LO https://cdn.kernel.org/pub/linux/kernel/v6.x/linux-6.8.tar.xz
 #            export OLD=$(sha256sum linux-6.8.tar.xz | awk '{ print $1}')
