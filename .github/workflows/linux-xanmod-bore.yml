@@ -118,6 +118,7 @@ jobs:
             export OLD=$(sha256sum patch-6.9.${OLDVERSION}-xanmod1.xz | awk '{ print $1}')
             echo "sed -i 's/${OLD}/${NEW}/g' PKGBUILD" | bash
             echo "sed -i 's/pkgver=\${_major}."${OLDVERSION}"/pkgver=\${_major}."${{ github.event.inputs.new_kernel_ver }}"/g' PKGBUILD" | bash
+            sed -i 's/4ff14a5ba9d4a9fcb08c4677640282025cba03300073afe60a3729f74c2384e6/SKIP/g' PKGBUILD
           fi
 #            sed -i "/0002-glitched-cfs.patch/d" PKGBUILD
 #            sed -i "/0003-glitched-eevdf-additions.patch/d" PKGBUILD
