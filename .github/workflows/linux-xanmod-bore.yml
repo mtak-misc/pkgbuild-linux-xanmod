@@ -102,8 +102,6 @@ jobs:
             export OLD=$(sha256sum 0001-bore.patch | awk '{ print $1}')
             curl -L https://raw.githubusercontent.com/firelzrd/bore-scheduler/main/patches/stable/linux-6.10-bore/0001-linux6.10.y-bore${{ github.event.inputs.new_bore_ver }}.patch -o 0001-bore.patch
             sed -i \
-            -e 's/Adaptive sched.*/Remove energy efficiency functions by Alexandre Frade/' \
-            -e 's/Copyright (C) 2007 Red Hat.*/(C) 2021 Alexandre Frade <kernel@xanmod.org>/' \
             -e 's/scaling = SCHED_TUNABLESCALING_LOG/scaling = SCHED_TUNABLESCALING_NONE/' \
             ./0001-bore.patch
             export NEW=$(sha256sum 0001-bore.patch | awk '{ print $1}')
