@@ -92,7 +92,7 @@ jobs:
         uses: actions/checkout@v4
         with: 
           repository: micros24/linux-xanmod-bore
-          ref: 6.9
+          ref: 6.10
           path: linux-xanmod-bore
       - name: Apply patches
         if: ${{ github.event.inputs.apply_patch == 'true' }}
