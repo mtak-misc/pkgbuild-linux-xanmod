@@ -100,7 +100,7 @@ jobs:
           cd linux-xanmod-bore
           if [ "${{ github.event.inputs.new_bore_ver }}" != "" ]; then
             export OLD=$(sha256sum 0001-bore.patch | awk '{ print $1}')
-            curl -L https://raw.githubusercontent.com/firelzrd/bore-scheduler/main/patches/stable/linux-6.10-bore/0001-linux6.10.y-bore${{ github.event.inputs.new_bore_ver }}.patch -o 0001-bore.patch
+            curl -L https://raw.githubusercontent.com/firelzrd/bore-scheduler/main/patches/stable/linux-6.11-bore/0001-linux6.11.y-bore${{ github.event.inputs.new_bore_ver }}.patch -o 0001-bore.patch
             sed -i \
             -e 's/scaling = SCHED_TUNABLESCALING_LOG/scaling = SCHED_TUNABLESCALING_NONE/' \
             ./0001-bore.patch
