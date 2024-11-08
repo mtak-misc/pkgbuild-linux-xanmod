@@ -108,20 +108,6 @@ jobs:
             sed -i -e 's/scaling = SCHED_TUNABLESCALING_LOG/scaling = SCHED_TUNABLESCALING_NONE/' ./0001-bore.patch
             export NEW=$(sha256sum 0001-bore.patch | awk '{ print $1}')
             echo "sed -i 's/${OLD}/${NEW}/g' PKGBUILD" | bash
-
-            export OLD=$(sha256sum 0003-glitched-eevdf-additions.patch | awk '{ print $1}')
-            curl -LO https://raw.githubusercontent.com/micros24/linux-xanmod-bore/refs/heads/6.11/0003-glitched-eevdf-additions.patch
-            sed -i '/-const_debug unsigned int sysctl_sched_migration_cost/i \ #ifdef CONFIG_SCHED_BORE' 0003-glitched-eevdf-additions.patch
-            sed -i '/-const_debug unsigned int sysctl_sched_migration_cost/i \ const_debug uint sysctl_sched_migration_cost_base = CONFIG_MIGRATION_COST_BASE_NS;' 0003-glitched-eevdf-additions.patch
-            sed -i '/-const_debug unsigned int sysctl_sched_migration_cost/i \ const_debug uint sysctl_sched_migration_cost_step = CONFIG_MIGRATION_COST_STEP_NS;' 0003-glitched-eevdf-additions.patch
-            sed -i '/-const_debug unsigned int sysctl_sched_migration_cost/i \ __read_mostly uint sysctl_sched_migration_cost = CONFIG_MIGRATION_COST_BASE_NS;' 0003-glitched-eevdf-additions.patch
-            sed -i '/-const_debug unsigned int sysctl_sched_migration_cost/i \ #else // !CONFIG_SCHED_BORE' 0003-glitched-eevdf-additions.patch
-            sed -i '/+const_debug unsigned int sysctl_sched_migration_cost/a \ #endif // CONFIG_SCHED_BORE' 0003-glitched-eevdf-additions.patch
-            sed -i 's/unsigned int        sysctl_sched_min_base_slice/const_debug   uint sysctl_sched_min_base_slice/g' 0003-glitched-eevdf-additions.patch
-            sed -i '/const_debug   uint sysctl_sched_min_base_slice/a \ __read_mostly uint sysctl_sched_base_slice     = nsecs_per_tick;' 0003-glitched-eevdf-additions.patch
-            sed -i 's/86,11/86,18/g' 0003-glitched-eevdf-additions.patch 
-            export NEW=$(sha256sum 0003-glitched-eevdf-additions.patch | awk '{ print $1}')
-            echo "sed -i 's/${OLD}/${NEW}/g' PKGBUILD" | bash
           fi
           PKGVERSION=$(grep "pkgver=" PKGBUILD)
           OLDVERSION="${PKGVERSION#*"."}"
