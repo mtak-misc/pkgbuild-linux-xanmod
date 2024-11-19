@@ -129,6 +129,7 @@ jobs:
             export NEW=$(sha256sum 0004-o3-optimization.patch | awk '{ print $1}')
             echo "sed -i 's/${OLD}/${NEW}/g' PKGBUILD" | bash
             sed -i 's/_sf_branch=main/_sf_branch=edge/g' PKGBUILD
+            sed -i '/0004-o3-optimization.patch/d' PKGBUILD
           fi
 #            sed -i "/0002-glitched-cfs.patch/d" PKGBUILD
 #            sed -i "/0003-glitched-eevdf-additions.patch/d" PKGBUILD
