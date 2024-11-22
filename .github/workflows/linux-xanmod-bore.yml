@@ -126,10 +126,10 @@ jobs:
             echo "sed -i 's/${OLD}/${NEW}/g' PKGBUILD" | bash
             export OLD=$(sha256sum 0004-o3-optimization.patch | awk '{ print $1}')
             curl -L https://github.com/Frogging-Family/linux-tkg/raw/master/linux-tkg-patches/6.12/0013-optimize_harder_O3.patch -o 0004-o3-optimization.patch
+            sed -i '/KBUILD_CFLAGS += -O3/a \ # Perform swing modulo scheduling immediately before the first scheduling pass.\n\ # This pass looks at innermost loops and reorders their instructions by\n\ # overlapping different iterations.\n\ KBUILD_CFLAGS += $(call cc-option,-fmodulo-sched -fmodulo-sched-allow-regmoves)' 0004-o3-optimization.patch 
             export NEW=$(sha256sum 0004-o3-optimization.patch | awk '{ print $1}')
             echo "sed -i 's/${OLD}/${NEW}/g' PKGBUILD" | bash
             sed -i 's/_sf_branch=main/_sf_branch=edge/g' PKGBUILD
-            sed -i '/0004-o3-optimization.patch/d' PKGBUILD
           fi
 #            sed -i "/0002-glitched-cfs.patch/d" PKGBUILD
 #            sed -i "/0003-glitched-eevdf-additions.patch/d" PKGBUILD
