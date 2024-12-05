@@ -112,13 +112,12 @@ jobs:
           PKGVERSION=$(grep "pkgver=" PKGBUILD)
           OLDVERSION="${PKGVERSION#*"."}"
           if [ "${{ github.event.inputs.new_kernel_ver }}" != "" ] && [ "${{ github.event.inputs.new_kernel_ver }}" != ${OLDVERSION} ]; then
-            curl -LO https://sourceforge.net/projects/xanmod/files/releases/edge/6.12.${{ github.event.inputs.new_kernel_ver }}-xanmod2/patch-6.12.${{ github.event.inputs.new_kernel_ver }}-xanmod2.xz
-            export NEW=$(sha256sum patch-6.12.${{ github.event.inputs.new_kernel_ver }}-xanmod2.xz | awk '{ print $1}')
+            curl -LO https://sourceforge.net/projects/xanmod/files/releases/edge/6.12.${{ github.event.inputs.new_kernel_ver }}-xanmod1/patch-6.12.${{ github.event.inputs.new_kernel_ver }}-xanmod1.xz
+            export NEW=$(sha256sum patch-6.12.${{ github.event.inputs.new_kernel_ver }}-xanmod1.xz | awk '{ print $1}')
             curl -LO https://sourceforge.net/projects/xanmod/files/releases/edge/6.12.${OLDVERSION}-xanmod1/patch-6.12.${OLDVERSION}-xanmod1.xz
             export OLD=$(sha256sum patch-6.12.${OLDVERSION}-xanmod1.xz | awk '{ print $1}')
             echo "sed -i 's/${OLD}/${NEW}/g' PKGBUILD" | bash
             echo "sed -i 's/pkgver=\${_major}."${OLDVERSION}"/pkgver=\${_major}."${{ github.event.inputs.new_kernel_ver }}"/g' PKGBUILD" | bash
-            sed -i 's/xanmod=1/xanmod=2/g' PKGBUILD
           fi
 #            sed -i "/0002-glitched-cfs.patch/d" PKGBUILD
 #            sed -i "/0003-glitched-eevdf-additions.patch/d" PKGBUILD
