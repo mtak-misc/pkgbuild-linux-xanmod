@@ -99,7 +99,8 @@ jobs:
         if: ${{ github.event.inputs.apply_patch == 'true' }}
         run: |
           cd linux-xanmod-bore
-          sed -i '/scripts\/config --enable STACK_VALIDATION/a scripts\/config --set-val CONFIG_X86_64_VERSION 2' PKGBUILD
+          sed -i '/scripts\/config --enable STACK_VALIDATION/a \ \ scripts\/config --set-val CONFIG_X86_64_VERSION 2' PKGBUILD
+          cat PKGBUILD
           if [ "${{ github.event.inputs.new_bore_ver }}" != "" ]; then
             export OLD=$(sha256sum 0001-bore.patch | awk '{ print $1}')
             curl -L https://raw.githubusercontent.com/firelzrd/bore-scheduler/main/patches/stable/linux-6.13-bore/0001-linux6.13.y-bore${{ github.event.inputs.new_bore_ver }}.patch -o 0001-bore.patch
