@@ -125,6 +125,7 @@ jobs:
             export OLD=$(sha256sum linux-6.12.tar.xz | awk '{ print $1}')
             echo "sed -i 's/${OLD}/${NEW}/g' PKGBUILD" | bash
             sed -i 's/xanmod\/gcc/x86_64/g' PKGBUILD
+            sed -i 's/xanmod=1/xanmod=2/g' PKGBUILD
           fi
 #            sed -i "/0002-glitched-cfs.patch/d" PKGBUILD
 #            sed -i "/0003-glitched-eevdf-additions.patch/d" PKGBUILD
