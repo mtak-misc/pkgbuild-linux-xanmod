@@ -111,7 +111,7 @@ jobs:
           OLDVERSION="${PKGVERSION#*"."}"
           if [ "${{ github.event.inputs.new_kernel_ver }}" != "" ] && [ "${{ github.event.inputs.new_kernel_ver }}" != ${OLDVERSION} ]; then
             curl -LO https://sourceforge.net/projects/xanmod/files/releases/edge/6.13.${{ github.event.inputs.new_kernel_ver }}-xanmod1/patch-6.13.${{ github.event.inputs.new_kernel_ver }}-xanmod1.xz
-            curl -L "https://downloads.sourceforge.net/project/xanmod/releases/main/6.13.4-xanmod1/patch-6.13.4-xanmod1.xz?ts=gAAAAABnuQ5GHEAs2ctjCaklcf0HI9AYojrNLtqFrRtq6MhoUkowxpgvYl9zaGs-7dq8saZc0PneTleERIof5iwLcwBh35b8pw%3D%3D&use_mirror=nchc&r=https%3A%2F%2Fxanmod.org%2F" -o patch-6.13.4-xanmod1.xz 
+         
             export NEW=$(sha256sum patch-6.13.${{ github.event.inputs.new_kernel_ver }}-xanmod1.xz | awk '{ print $1}')
             curl -LO https://sourceforge.net/projects/xanmod/files/releases/main/6.12.${OLDVERSION}-xanmod1/patch-6.12.${OLDVERSION}-xanmod1.xz
             export OLD=$(sha256sum patch-6.12.${OLDVERSION}-xanmod1.xz | awk '{ print $1}')
