@@ -93,7 +93,7 @@ jobs:
         uses: actions/checkout@v4
         with: 
           repository: micros24/linux-xanmod-bore
-          ref: "6.12"
+          ref: "6.13"
           path: linux-xanmod-bore
       - name: Apply patches
         if: ${{ github.event.inputs.apply_patch == 'true' }}
@@ -113,19 +113,10 @@ jobs:
             curl -LO https://sourceforge.net/projects/xanmod/files/releases/edge/6.13.${{ github.event.inputs.new_kernel_ver }}-xanmod1/patch-6.13.${{ github.event.inputs.new_kernel_ver }}-xanmod1.xz
          
             export NEW=$(sha256sum patch-6.13.${{ github.event.inputs.new_kernel_ver }}-xanmod1.xz | awk '{ print $1}')
-            curl -LO https://sourceforge.net/projects/xanmod/files/releases/main/6.12.${OLDVERSION}-xanmod1/patch-6.12.${OLDVERSION}-xanmod1.xz
-            export OLD=$(sha256sum patch-6.12.${OLDVERSION}-xanmod1.xz | awk '{ print $1}')
+            curl -LO https://sourceforge.net/projects/xanmod/files/releases/main/6.13.${OLDVERSION}-xanmod1/patch-6.13.${OLDVERSION}-xanmod1.xz
+            export OLD=$(sha256sum patch-6.13.${OLDVERSION}-xanmod1.xz | awk '{ print $1}')
             echo "sed -i 's/${OLD}/${NEW}/g' PKGBUILD" | bash
             echo "sed -i 's/pkgver=\${_major}."${OLDVERSION}"/pkgver=\${_major}."${{ github.event.inputs.new_kernel_ver }}"/g' PKGBUILD" | bash
-            sed -i 's/_sf_branch=main/_sf_branch=edge/g' PKGBUILD
-
-            sed -i 's/_major=6.12/_major=6.13/g' PKGBUILD
-            curl -LO https://cdn.kernel.org/pub/linux/kernel/v6.x/linux-6.13.tar.xz
-            export NEW=$(sha256sum linux-6.13.tar.xz | awk '{ print $1}')
-            curl -LO https://cdn.kernel.org/pub/linux/kernel/v6.x/linux-6.12.tar.xz
-            export OLD=$(sha256sum linux-6.12.tar.xz | awk '{ print $1}')
-            echo "sed -i 's/${OLD}/${NEW}/g' PKGBUILD" | bash
-            sed -i 's/xanmod\/gcc/x86_64/g' PKGBUILD
           fi
 #            sed -i "/0002-glitched-cfs.patch/d" PKGBUILD
 #            sed -i "/0003-glitched-eevdf-additions.patch/d" PKGBUILD
