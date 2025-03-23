@@ -111,9 +111,6 @@ jobs:
           OLDVERSION="${PKGVERSION#*"."}"
           if [ "${{ github.event.inputs.new_kernel_ver }}" != "" ] && [ "${{ github.event.inputs.new_kernel_ver }}" != ${OLDVERSION} ]; then
             curl -LO https://sourceforge.net/projects/xanmod/files/releases/main/6.13.${{ github.event.inputs.new_kernel_ver }}-xanmod1/patch-6.13.${{ github.event.inputs.new_kernel_ver }}-xanmod1.xz
-            curl -LO https://downloads.sourceforge.net/project/xanmod/releases/main/6.13.8-xanmod1/patch-6.13.8-xanmod1.xz?ts=gAAAAABn36XAGm_56EKC6Cqm9eEBYoxCau15N03ez5c_PGuwRrKLJl2zUrrZK9G7uWf9PbvnDqKuwH7PXtmAag14wYxkYq4UVA%3D%3D&use_mirror=zenlayer&r=
-            ls -l
-            sed -i 's/sourceforge.net\/projects\/xanmod\/files\/releases\/${_sf_branch}\/${pkgver}-xanmod${xanmod}${_revision}\/patch-${pkgver}-xanmod${xanmod}.xz/downloads.sourceforge.net\/project\/xanmod\/releases\/main\/6.13.8-xanmod1\/patch-6.13.8-xanmod1.xz?ts=gAAAAABn36XAGm_56EKC6Cqm9eEBYoxCau15N03ez5c_PGuwRrKLJl2zUrrZK9G7uWf9PbvnDqKuwH7PXtmAag14wYxkYq4UVA%3D%3D&use_mirror=zenlayer&r=/g' PKGBUILD
             export NEW=$(sha256sum patch-6.13.${{ github.event.inputs.new_kernel_ver }}-xanmod1.xz | awk '{ print $1}')
             curl -LO https://sourceforge.net/projects/xanmod/files/releases/main/6.13.${OLDVERSION}-xanmod1/patch-6.13.${OLDVERSION}-xanmod1.xz
             export OLD=$(sha256sum patch-6.13.${OLDVERSION}-xanmod1.xz | awk '{ print $1}')
