@@ -11,6 +11,67 @@ jobs:
     runs-on: ubuntu-latest
     container: archlinux:latest    
     steps:
+      - name: Cleanup
+        run: |
+          docker images
+          sudo rm -rf "/opt/*" || true
+          sudo rm -rf "/usr/share/dotnet" || true
+          sudo rm -rf "$AGENT_TOOLSDIRECTORY" || true
+          sudo rm -rf "/usr/local/lib/android" || true
+          sudo rm -rf "/usr/local/share/boost" || true
+          sudo rm -rf "/usr/lib/jvm" || true
+          sudo rm -rf "/usr/share/swift" || true
+          sudo rm -rf "/usr/local/julia*" || true
+          sudo rm -rf "/usr/share/kotlinc" || true
+          sudo rm -rf "/usr/local/share/edge_driver" || true
+          sudo rm -rf "/usr/local/share/chromedriver-linux64" || true
+          sudo rm -rf "/usr/local/share/gecko_driver" || true
+          sudo rm -rf "/usr/share/miniconda" || true
+          sudo rm -rf "/usr/local/share/phantomjs*" || true
+          sudo rm -rf "/usr/share/sbt" || true
+          sudo rm -rf "/usr/local/sqlpackage" || true
+
+          sudo npm uninstall bazel
+          rustup self uninstall -y
+          sudo apt purge \
+            ansible \
+            apache2 \
+            aria2 \
+            azure-cli \
+            cabal* \
+            clang* \
+            dotnet-sdk* \
+            firefox \
+            ghc* \
+            google-chrome-stable \
+            google-cloud-sdk \
+            kubectl \
+            libpq-dev \
+            microsoft-edge-stable \
+            moby-buildx \
+            moby-cli \
+            moby-compose \
+            moby-engine \
+            mongodb* \
+            mono-complete \
+            mysql* \
+            nginx \
+            node* \
+            npm* \
+            nuget \
+            php* \
+            postgresql* \
+            powershell \
+            r-base \
+            rpm \
+            ruby* \
+            sphinxsearch \
+            subversion \
+            yarn \
+            -yq >/dev/null 2>&1 || true
+          sudo apt-get autoremove -y >/dev/null 2>&1 || true
+          sudo apt-get autoclean -y >/dev/null 2>&1 || true
+          df -h
       - name: Checkout repo
         uses: actions/checkout@v3
       - name: Prepare for makepkg
@@ -21,26 +82,6 @@ jobs:
           chown builder -R ..
           chown builder -R /tmp
           su builder -c "gpg --recv 38DBBDC86092693E"
-      - name: Apply patches
-        run: |
-          cd linux-xanmod
-          curl -L https://raw.githubusercontent.com/Frogging-Family/linux-tkg/master/linux-tkg-patches/6.5/0013-optimize_harder_O3.patch -o O3.patch
-          sed -i '/msg2 "Setting version..."/i \ \ patch -Np1 -i ../../O3.patch' PKGBUILD
-          sed -i '/scripts\/config --enable CONFIG_STACK_VALIDATION/i \ \ scripts/config --disable CONFIG_HZ_500' PKGBUILD
-          sed -i '/scripts\/config --enable CONFIG_STACK_VALIDATION/i \ \ scripts/config --enable CONFIG_HZ_1000' PKGBUILD
-          curl -LO https://sourceforge.net/projects/xanmod/files/releases/edge/6.5.0-xanmod1/patch-6.5.0-xanmod1.xz
-          export NEW=$(sha256sum patch-6.5.0-xanmod1.xz | awk '{ print $1}')
-          curl -LO https://sourceforge.net/projects/xanmod/files/releases/main/6.4.12-xanmod1/patch-6.4.12-xanmod1.xz
-          export OLD=$(sha256sum patch-6.4.12-xanmod1.xz | awk '{ print $1}')
-          echo "sed -i 's/${OLD}/${NEW}/g' PKGBUILD" | bash
-          curl -LO https://cdn.kernel.org/pub/linux/kernel/v6.x/linux-6.4.tar.xz
-          export OLD=$(sha256sum linux-6.4.tar.xz | awk '{ print $1}')
-          curl -LO https://cdn.kernel.org/pub/linux/kernel/v6.x/linux-6.5.tar.xz
-          export NEW=$(sha256sum linux-6.5.tar.xz | awk '{ print $1}')
-          echo "sed -i 's/${OLD}/${NEW}/g' PKGBUILD" | bash
-          sed -i 's/_major=6.4/_major=6.5/g' PKGBUILD
-          sed -i 's/releases\/main/releases\edge/g' PKGBUILD
-          sed -i 's/pkgver=${_major}.12/pkgver=${_major}.0/g' PKGBUILD
       - name: Build kernel
         run: |
           cd linux-xanmod
