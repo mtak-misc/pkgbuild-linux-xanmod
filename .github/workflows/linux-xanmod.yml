@@ -1,10 +1,7 @@
-name: build-linux-xanmod
+すname: build-linux-xanmod
 
 on:
   workflow_dispatch:
-
-env:
-  PKGDEST: "/tmp/pkgbuild-linux-xanmod"
 
 jobs:
   build:
@@ -90,5 +87,5 @@ jobs:
       - uses: actions/upload-artifact@v4
         with:
           name: linux-xanmod
-          path: ${{ env.PKGDEST }}/*.pkg.tar.zst
-        
+          path: ${{ github.workspace }}/linux-xanmod/*.pkg.tar.zst
+
