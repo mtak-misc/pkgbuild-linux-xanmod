@@ -74,14 +74,6 @@ jobs:
           df -h
       - name: Checkout repo
         uses: actions/checkout@v4
-      - name: Prepare for makepkg
-        run: |
-          pacman -Syu --noconfirm base-devel sudo git
-          useradd builder -m -G wheel && echo "builder ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
-          git clone --depth 1 https://aur.archlinux.org/linux-xanmod.git
-          chown builder -R ..
-          chown builder -R /tmp
-          su builder -c "gpg --recv 38DBBDC86092693E"
       - name: Set UserID
         run: |
           echo "USERID=$(id -u $(whoami))" >> $GITHUB_ENV
