@@ -9,7 +9,7 @@ env:
 jobs:
   build:
     runs-on: ubuntu-latest
-    container: archlinux:latest    
+#    container: archlinux:latest    
     steps:
       - name: Cleanup
         run: |
@@ -82,10 +82,16 @@ jobs:
           chown builder -R ..
           chown builder -R /tmp
           su builder -c "gpg --recv 38DBBDC86092693E"
-      - name: Build kernel
+      - name: Set UserID
         run: |
-          cd linux-xanmod
-          su builder -c "yes '' | MAKEFLAGS=\"-j $(nproc)\" env use_numa=n use_tracers=n makepkg --noconfirm -sc"
+          echo "USERID=$(id -u $(whoami))" >> $GITHUB_ENV
+        env: 
+          USERID: ''          
+      - name: Build
+        uses: docker://archlinux:latest
+        with:
+          entrypoint: '/bin/sh'
+          args: ./gcc-build.sh ${{ env.USERID }} 
       - uses: actions/upload-artifact@v3
         with:
           name: linux-xanmod
