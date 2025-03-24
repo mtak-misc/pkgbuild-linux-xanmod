@@ -1,4 +1,4 @@
-すname: build-linux-xanmod
+name: build-linux-xanmod
 
 on:
   workflow_dispatch:
