@@ -73,7 +73,7 @@ jobs:
           sudo apt-get autoclean -y >/dev/null 2>&1 || true
           df -h
       - name: Checkout repo
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - name: Prepare for makepkg
         run: |
           pacman -Syu --noconfirm base-devel sudo git
@@ -92,7 +92,7 @@ jobs:
         with:
           entrypoint: '/bin/sh'
           args: ./gcc-build.sh ${{ env.USERID }} 
-      - uses: actions/upload-artifact@v3
+      - uses: actions/upload-artifact@v4
         with:
           name: linux-xanmod
           path: ${{ env.PKGDEST }}/*.pkg.tar.zst
