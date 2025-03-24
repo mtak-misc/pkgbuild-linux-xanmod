@@ -74,6 +74,9 @@ jobs:
           df -h
       - name: Checkout repo
         uses: actions/checkout@v4
+      - name: Prepare for makepkg
+        run: |
+          git clone --depth 1 https://aur.archlinux.org/linux-xanmod.git
       - name: Set UserID
         run: |
           echo "USERID=$(id -u $(whoami))" >> $GITHUB_ENV
