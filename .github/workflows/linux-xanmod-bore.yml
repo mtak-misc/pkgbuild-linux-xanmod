@@ -99,7 +99,6 @@ jobs:
           ref: "6.13"
           path: linux-xanmod-bore
       - name: Apply patches
-        if: ${{ github.event.inputs.apply_patch == 'true' }}
         run: |
           cd linux-xanmod-bore
           sed -i '/scripts\/config --enable STACK_VALIDATION/a \ \ scripts\/config --set-val CONFIG_X86_64_VERSION 2' PKGBUILD
