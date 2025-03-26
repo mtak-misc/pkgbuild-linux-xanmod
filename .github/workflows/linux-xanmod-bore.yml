@@ -115,7 +115,7 @@ jobs:
           OLDVERSION="${MAJOR#_major=}"
           OLDMINORVERSION="${MAJOR#*.}"
           MINORVERSION=${OLDMINORVERSION}
-          echo "MINORVERSION="${MINORVERSION}
+          
           if [ "${{ github.event.inputs.new_kernel_minor_ver }}" != "" ] && [ "${{ github.event.inputs.new_kernel_minor_ver }}" != ${OLDMINORVERSION} ]; then
             MINORVERSION="${{ github.event.inputs.new_kernel_minor_ver }}"
           fi
