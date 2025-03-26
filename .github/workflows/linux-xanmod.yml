@@ -89,16 +89,24 @@ jobs:
       - name: Modify PKGBUILD
         run: |
           cd linux-xanmod
-          OLDBRANCH=$(grep "_sf_branch=" PKGBUILD)
+          BRANCH=$(grep "_sf_branch=" PKGBUILD)
+          OLDBRANCH="${BRANCH#_sf_branch=}"
           BRANCH="main"
           if [ "${{ github.event.inputs.use_edge }}" == "true" ]; then
             sed -i 's/_sf_branch=main/_sf_branch=edge/g' PKGBUILD
             BRANCH="edge"
           fi
           PKGVERSION=$(grep "pkgver=" PKGBUILD)
-          OLDVERSION="${PKGVERSION#*"."}"
+          OLDPATCHVERSION="${PKGVERSION#*"."}"
+          MAJOR=$(grep "_major=" PKGBUILD)
+          OLDVERSION="${MAJOR#_major=}"
           if [ "${{ github.event.inputs.new_kernel_minor_ver }}" != "" ] && [ "${{ github.event.inputs.new_kernel_patch_ver }}" != "" ] && [ "${{ github.event.inputs.new_kernel_patch_ver }}" != ${OLDVERSION} ]; then
-            curl -LO https://sourceforge.net/projects/xanmod/files/releases/$(BRANCH)/6.${{ github.event.inputs.new_kernel_minor_ver }}.${{ github.event.inputs.new_kernel_patch_ver }}-xanmod1/patch-6.${{ github.event.inputs.new_kernel_minor_ver }}.${{ github.event.inputs.new_kernel_patch_ver }}-xanmod1.xz
+            curl -LO https://sourceforge.net/projects/xanmod/files/releases/${BRANCH}/6.${{ github.event.inputs.new_kernel_minor_ver }}.${{ github.event.inputs.new_kernel_patch_ver }}-xanmod1/patch-6.${{ github.event.inputs.new_kernel_minor_ver }}.${{ github.event.inputs.new_kernel_patch_ver }}-xanmod1.xz
+            export NEW=$(sha256sum patch-6.${{ github.event.inputs.new_kernel_minor_ver }}.${{ github.event.inputs.new_kernel_patch_ver }}.-xanmod1.xz | awk '{ print $1}')
+            curl -LO https://sourceforge.net/projects/xanmod/files/releases/${OLDBRANCH}/${OLDVERSION}.${OLDPATCHVERSION}-xanmod1/patch-${OLDVERSION}.${OLDPATCHVERSION}-xanmod1.xz
+            export OLD=$(sha256sum patch-6.${}.${{ github.event.inputs.new_kernel_ver }}-xanmod1.xz | awk '{ print $1}')
+            echo "sed -i 's/${OLD}/${NEW}/g' PKGBUILD" | bash
+            echo "sed -i 's/pkgver=\${_major}."${OLDPATCHVERSION}"/pkgver=\${_major}."${{ github.event.inputs.new_kernel_patch_ver }}"/g' PKGBUILD" | bash
           fi
       - name: Set UserID
         run: |
