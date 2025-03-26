@@ -126,10 +126,6 @@ jobs:
             export OLD=$(sha256sum linux-${OLDVERSION}.tar.xz | awk '{ print $1}')
             echo "sed -i 's/${OLD}/${NEW}/g' PKGBUILD" | bash
             echo "sed -i 's/_major=${OLDVERSION}/_major=6.${{ github.event.inputs.new_kernel_minor_ver }}/g' PKGBUILD" | bash
-            export OLD=$(sha256sum 0004-o3-optimization.patch | awk '{ print $1}')
-            curl -L https://github.com/Frogging-Family/linux-tkg/raw/master/linux-tkg-patches/6.${MINORVERSION}/0013-optimize_harder_O3.patch -o 0004-o3-optimization.patch
-            export NEW=$(sha256sum 0004-o3-optimization.patch | awk '{ print $1}')
-            echo "sed -i 's/${OLD}/${NEW}/g' PKGBUILD" | bash
           fi
           if [ "${{ github.event.inputs.new_bore_ver }}" != "" ]; then
             export OLD=$(sha256sum 0001-bore.patch | awk '{ print $1}')
@@ -153,6 +149,10 @@ jobs:
 #            export OLD=$(sha256sum 0003-glitched-eevdf-additions.patch | awk '{ print $1}')
 #            curl -L https://github.com/Frogging-Family/linux-tkg/raw/master/linux-tkg-patches/6.${MINORVERSION}/0003-glitched-eevdf-additions.patch -o 0003-glitched-eevdf-additions.patch
 #            export NEW=$(sha256sum 0003-glitched-eevdf-additions.patch | awk '{ print $1}')
+#            echo "sed -i 's/${OLD}/${NEW}/g' PKGBUILD" | bash
+#            export OLD=$(sha256sum 0004-o3-optimization.patch | awk '{ print $1}')
+#            curl -L https://github.com/Frogging-Family/linux-tkg/raw/master/linux-tkg-patches/6.${MINORVERSION}/0013-optimize_harder_O3.patch -o 0004-o3-optimization.patch
+#            export NEW=$(sha256sum 0004-o3-optimization.patch | awk '{ print $1}')
 #            echo "sed -i 's/${OLD}/${NEW}/g' PKGBUILD" | bash
       - name: Set UserID
         run: |
