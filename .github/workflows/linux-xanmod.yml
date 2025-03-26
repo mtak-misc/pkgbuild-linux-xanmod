@@ -82,11 +82,16 @@ jobs:
       - name: Prepare for makepkg
         run: |
           git clone --depth 1 https://aur.archlinux.org/linux-xanmod.git
-      - name: Modify PKGBUILD
+      - name: Use edge
         if: ${{ github.event.inputs.use_edge == 'true' }}
         run: |
           cd linux-xanmod
           sed -i 's/_sf_branch=main/_sf_branch=edge/g' PKGBUILD
+      - name: Use main
+        if: ${{ github.event.inputs.use_edge == 'false' }}
+        run: |
+          cd linux-xanmod
+          sed -i 's/_sf_branch=edge/_sf_branch=main/g' PKGBUILD
         
       - name: Set UserID
         run: |
