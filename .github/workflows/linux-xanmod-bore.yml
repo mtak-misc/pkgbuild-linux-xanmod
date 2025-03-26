@@ -154,6 +154,7 @@ jobs:
             echo "sed -i 's/${OLD}/${NEW}/g' PKGBUILD" | bash
             echo "sed -i 's/pkgver=\${_major}."${OLDPATCHVERSION}"/pkgver=\${_major}."${{ github.event.inputs.new_kernel_patch_ver }}"/g' PKGBUILD" | bash
           fi
+          cat PKGBUILD
       - name: Set UserID
         run: |
           echo "USERID=$(id -u $(whoami))" >> $GITHUB_ENV
