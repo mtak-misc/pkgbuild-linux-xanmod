@@ -21,6 +21,7 @@ jobs:
 #    container: archlinux:latest    
     steps:
       - name: Cleanup
+        if: ${{ 'true' == 'false' }}
         run: |
           docker images
           sudo rm -rf "/opt/*" || true
@@ -100,7 +101,7 @@ jobs:
           OLDPATCHVERSION="${PKGVERSION#*"."}"
           MAJOR=$(grep "_major=" PKGBUILD)
           OLDVERSION="${MAJOR#_major=}"
-          OLDMINORVERSION=${_major#*.}
+          OLDMINORVERSION="${_major#*.}"
           if [ ${{ github.event.inputs.new_kernel_minor_ver }} != ${OLDMINORVERSION} ]; then
             curl -LO https://cdn.kernel.org/pub/linux/kernel/v6.x/linux-6.${{ github.event.inputs.new_kernel_minor_ver }}.tar.xz
             export NEW=$(sha256sum linux-6.${{ github.event.inputs.new_kernel_minor_ver }}.tar.xz | awk '{ print $1}')
@@ -109,6 +110,7 @@ jobs:
             echo "sed -i 's/${OLD}/${NEW}/g' PKGBUILD" | bash
           fi
           MINORVERSION=${OLDMINORVERSION}
+          echo "MINORVERSION="&{MINORVERSION}
           if [ "${{ github.event.inputs.new_kernel_minor_ver }}" != "" ] && [ "${{ github.event.inputs.new_kernel_minor_ver }}" != ${OLDMINORVERSION} ]; then
             MINORVERSION="${{ github.event.inputs.new_kernel_minor_ver }}"
           fi
