@@ -111,7 +111,7 @@ jobs:
             echo "sed -i 's/_major=${OLDVERSION}/_major=6.${{ github.event.inputs.new_kernel_minor_ver }}/g' PKGBUILD" | bash
           fi
           MINORVERSION=${OLDMINORVERSION}
-          echo "MINORVERSION="${MINORVERSION}
+          
           if [ "${{ github.event.inputs.new_kernel_minor_ver }}" != "" ] && [ "${{ github.event.inputs.new_kernel_minor_ver }}" != ${OLDMINORVERSION} ]; then
             MINORVERSION="${{ github.event.inputs.new_kernel_minor_ver }}"
           fi
