@@ -126,9 +126,9 @@ jobs:
             export OLD=$(sha256sum linux-${OLDVERSION}.tar.xz | awk '{ print $1}')
             echo "sed -i 's/${OLD}/${NEW}/g' PKGBUILD" | bash
             echo "sed -i 's/_major=${OLDVERSION}/_major=6.${{ github.event.inputs.new_kernel_minor_ver }}/g' PKGBUILD" | bash
-            export OLD=$(sha256sum 0002-glitchedhed-cfs.patch)
-            curl -L https://github.com/Frogging-Family/linux-tkg/raw/master/linux-tkg-patches/6.${MINORVERSION}/0003-glitchedhed-cfs.patch -o 0002-glitchedhed-cfs.patch
-            export NEW=$(sha256sum 0002-glitchedhed-cfs.patch)
+            export OLD=$(sha256sum 0002-glitched-cfs.patch)
+            curl -L https://github.com/Frogging-Family/linux-tkg/raw/master/linux-tkg-patches/6.${MINORVERSION}/0003-glitched-cfs.patch -o 0002-glitched-cfs.patch
+            export NEW=$(sha256sum 0002-glitched-cfs.patch)
             echo "sed -i 's/${OLD}/${NEW}/g' PKGBUILD" | bash
             export OLD=$(sha256sum 0003-glitched-eevdf-additions.patch)
             curl -L https://github.com/Frogging-Family/linux-tkg/raw/master/linux-tkg-patches/6.${MINORVERSION}/0003-glitched-eevdf-additions.patch -o 0003-glitched-eevdf-additions.patch
