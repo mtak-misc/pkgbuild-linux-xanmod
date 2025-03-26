@@ -2,7 +2,15 @@ name: build-linux-xanmod
 
 on:
   workflow_dispatch:
-
+    inputs:
+      use_edge:
+        type: boolean
+        required: false
+        description: "Use edge"
+      new_kernel_ver:
+        type: string
+        required: false
+        description: "New kernel version"
 jobs:
   build:
     runs-on: ubuntu-latest
