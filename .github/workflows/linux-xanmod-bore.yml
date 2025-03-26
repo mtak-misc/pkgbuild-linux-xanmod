@@ -126,9 +126,9 @@ jobs:
             export OLD=$(sha256sum linux-${OLDVERSION}.tar.xz | awk '{ print $1}')
             echo "sed -i 's/${OLD}/${NEW}/g' PKGBUILD" | bash
             echo "sed -i 's/_major=${OLDVERSION}/_major=6.${{ github.event.inputs.new_kernel_minor_ver }}/g' PKGBUILD" | bash
-            sed -i "/0002-glitched-cfs.patch/d" PKGBUILD
-            sed -i "/0003-glitched-eevdf-additions.patch/d" PKGBUILD
-            sed -i 's/_sf_branch=edge/_sf_branch=main/g' PKGBUILD            
+            export OLD=$(sha256sum 0002-glitchedhed-cfs.patch)
+            curl -L https://github.com/Frogging-Family/linux-tkg/raw/master/linux-tkg-patches/6.${MINORVERSION}/0002-glitchedhed-cfs.patch -o 0002-glitchedhed-cfs.patch
+            sed -i "/0003-glitched-eevdf-additions.patch/d" PKGBUILD           
             export OLD=$(sha256sum 0004-o3-optimization.patch | awk '{ print $1}')
             curl -L https://github.com/Frogging-Family/linux-tkg/raw/master/linux-tkg-patches/6.${MINORVERSION}/0013-optimize_harder_O3.patch -o 0004-o3-optimization.patch
             export NEW=$(sha256sum 0004-o3-optimization.patch | awk '{ print $1}')
@@ -136,7 +136,7 @@ jobs:
           fi
           if [ "${{ github.event.inputs.new_bore_ver }}" != "" ]; then
             export OLD=$(sha256sum 0001-bore.patch | awk '{ print $1}')
-            curl -L https://raw.githubusercontent.com/firelzrd/bore-scheduler/main/patches/stable/linux-6.${MINORVERSION}-bore/0001-linux6.${MINORVERSION}.y-bore${{ github.event.inputs.new_bore_ver }}.patch -o 0001-bore.patch
+            curl -L https://raw.githubuserconten0002-glitcglitchedhed-cfs.patcht.com/firelzrd/bore-scheduler/main/patches/stable/linux-6.${MINORVERSION}-bore/0001-linux6.${MINORVERSION}.y-bore${{ github.event.inputs.new_bore_ver }}.patch -o 0001-bore.patch
             sed -i -e 's/scaling = SCHED_TUNABLESCALING_LOG/scaling = SCHED_TUNABLESCALING_NONE/' ./0001-bore.patch
             export NEW=$(sha256sum 0001-bore.patch | awk '{ print $1}')
             echo "sed -i 's/${OLD}/${NEW}/g' PKGBUILD" | bash
