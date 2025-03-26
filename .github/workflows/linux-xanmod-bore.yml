@@ -114,7 +114,11 @@ jobs:
           MAJOR=$(grep "_major=" PKGBUILD)
           OLDVERSION="${MAJOR#_major=}"
           OLDMINORVERSION="${MAJOR#*.}"
-          
+          MINORVERSION=${OLDMINORVERSION}
+          echo "MINORVERSION="${MINORVERSION}
+          if [ "${{ github.event.inputs.new_kernel_minor_ver }}" != "" ] && [ "${{ github.event.inputs.new_kernel_minor_ver }}" != ${OLDMINORVERSION} ]; then
+            MINORVERSION="${{ github.event.inputs.new_kernel_minor_ver }}"
+          fi
           if [ ${{ github.event.inputs.new_kernel_minor_ver }} != ${OLDMINORVERSION} ]; then
             curl -LO https://cdn.kernel.org/pub/linux/kernel/v6.x/linux-6.${{ github.event.inputs.new_kernel_minor_ver }}.tar.xz
             export NEW=$(sha256sum linux-6.${{ github.event.inputs.new_kernel_minor_ver }}.tar.xz | awk '{ print $1}')
@@ -122,11 +126,13 @@ jobs:
             export OLD=$(sha256sum linux-${OLDVERSION}.tar.xz | awk '{ print $1}')
             echo "sed -i 's/${OLD}/${NEW}/g' PKGBUILD" | bash
             echo "sed -i 's/_major=${OLDVERSION}/_major=6.${{ github.event.inputs.new_kernel_minor_ver }}/g' PKGBUILD" | bash
-          fi
-          MINORVERSION=${OLDMINORVERSION}
-          echo "MINORVERSION="${MINORVERSION}
-          if [ "${{ github.event.inputs.new_kernel_minor_ver }}" != "" ] && [ "${{ github.event.inputs.new_kernel_minor_ver }}" != ${OLDMINORVERSION} ]; then
-            MINORVERSION="${{ github.event.inputs.new_kernel_minor_ver }}"
+            sed -i "/0002-glitched-cfs.patch/d" PKGBUILD
+            sed -i "/0003-glitched-eevdf-additions.patch/d" PKGBUILD
+            sed -i 's/_sf_branch=edge/_sf_branch=main/g' PKGBUILD            
+            export OLD=$(sha256sum 0004-o3-optimization.patch | awk '{ print $1}')
+            curl -L https://github.com/Frogging-Family/linux-tkg/raw/master/linux-tkg-patches/6.${MINORVERSION}/0013-optimize_harder_O3.patch -o 0004-o3-optimization.patch
+            export NEW=$(sha256sum 0004-o3-optimization.patch | awk '{ print $1}')
+            echo "sed -i 's/${OLD}/${NEW}/g' PKGBUILD" | bash
           fi
           if [ "${{ github.event.inputs.new_bore_ver }}" != "" ]; then
             export OLD=$(sha256sum 0001-bore.patch | awk '{ print $1}')
