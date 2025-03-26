@@ -110,7 +110,7 @@ jobs:
           fi
           MINORVERSION=${OLDMINORVERSION}
           if [ "${{ github.event.inputs.new_kernel_minor_ver }}" != "" ] && [ "${{ github.event.inputs.new_kernel_minor_ver }}" != ${OLDMINORVERSION} ]; then
-            MINORVERSION=${{ github.event.inputs.new_kernel_minor_ver }}
+            MINORVERSION="${{ github.event.inputs.new_kernel_minor_ver }}"
           fi
           if  [ "${{ github.event.inputs.new_kernel_patch_ver }}" != "" ] && [ "${{ github.event.inputs.new_kernel_patch_ver }}" != ${OLDPATCHVERSION} ]; then
             curl -LO https://sourceforge.net/projects/xanmod/files/releases/${BRANCH}/6.${MINORVERSION}.${{ github.event.inputs.new_kernel_patch_ver }}-xanmod1/patch-6.${MINORVERSION}.${{ github.event.inputs.new_kernel_patch_ver }}-xanmod1.xz
