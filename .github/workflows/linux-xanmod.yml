@@ -111,6 +111,7 @@ jobs:
             curl -LO https://cdn.kernel.org/pub/linux/kernel/v6.x/linux-${OLDVERSION}.tar.xz
             export OLD=$(sha256sum linux-${OLDVERSION}.tar.xz | awk '{ print $1}')
             echo "sed -i 's/${OLD}/${NEW}/g' PKGBUILD" | bash
+            echo "sed -i 's/_major=${OLDVERSION}/_major=6.${{ github.event.inputs.new_kernel_minor_ver }}/g' PKGBUILD
           fi
           MINORVERSION=${OLDMINORVERSION}
           echo "MINORVERSION="${MINORVERSION}
