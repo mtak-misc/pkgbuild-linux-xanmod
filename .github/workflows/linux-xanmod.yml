@@ -7,10 +7,14 @@ on:
         type: boolean
         required: false
         description: "Use edge"
-      new_kernel_ver:
+      new_kernel_minor_ver:
         type: string
         required: false
-        description: "New kernel version"
+        description: "New kernel minor version"
+      new_kernel_patch_ver:
+        type: string
+        required: false
+        description: "New kernel patch version"
 jobs:
   build:
     runs-on: ubuntu-latest
