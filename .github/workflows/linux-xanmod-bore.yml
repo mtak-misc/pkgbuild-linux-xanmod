@@ -102,6 +102,7 @@ jobs:
         run: |
           cd linux-xanmod-bore
           curl -LO https://raw.githubusercontent.com/firelzrd/bore-scheduler/refs/heads/main/patches/stable/linux-6.14-bore/0002-sched-fair-Prefer-full-idle-SMT-cores.patch
+          sed -i '/patch -Np1 -i/i \ \ patch -Np1 -i ../0002-sched-fair-Prefer-full-idle-SMT-cores.patch' PKGBUILD
           sed -i '/scripts\/config --enable STACK_VALIDATION/a \ \ scripts\/config --set-val CONFIG_X86_64_VERSION 2' PKGBUILD
           BRANCH=$(grep "_sf_branch=" PKGBUILD)
           OLDBRANCH="${BRANCH#_sf_branch=}"
