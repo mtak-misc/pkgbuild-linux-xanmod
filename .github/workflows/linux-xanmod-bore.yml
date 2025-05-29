@@ -137,7 +137,6 @@ jobs:
             cat  ./0001-bore.patch
             export NEW=$(sha256sum 0001-bore.patch | awk '{ print $1}')
             echo "sed -i 's/${OLD}/${NEW}/g' PKGBUILD" | bash
-            sed -i -e 's/patch -Np1 </patch --verbose -Np1 </g' PKGBUILD
           fi
           if  [ "${{ github.event.inputs.new_kernel_patch_ver }}" != "" ] && [ "${{ github.event.inputs.new_kernel_patch_ver }}" != ${OLDPATCHVERSION} ]; then
             curl -LO https://sourceforge.net/projects/xanmod/files/releases/${BRANCH}/6.${MINORVERSION}.${{ github.event.inputs.new_kernel_patch_ver }}-xanmod1/patch-6.${MINORVERSION}.${{ github.event.inputs.new_kernel_patch_ver }}-xanmod1.xz
