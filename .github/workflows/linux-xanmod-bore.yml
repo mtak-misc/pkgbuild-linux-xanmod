@@ -130,7 +130,7 @@ jobs:
           if [ "${{ github.event.inputs.new_bore_ver }}" != "" ]; then
             export OLD=$(sha256sum 0001-bore.patch | awk '{ print $1}')
             curl -L https://raw.githubusercontent.com/firelzrd/bore-scheduler/main/patches/stable/linux-6.${MINORVERSION}-bore/0001-linux6.${MINORVERSION}.2-bore${{ github.event.inputs.new_bore_ver }}.patch -o 0001-bore.patch
-            sed -i -e 's/scaling = SCHED_TUNABLESCALING_LOG/scaling = SCHED_TUNABLESCALING_NONE/g' ./0001-bore.patch
+            sed -i -e 's/scaling = SCHED_TUNABLESCALING_LOG/scaling = SCHED_TUNABLESCALING_NONE/' ./0001-bore.patch
             sed -i -e 's/* (default: 0.75 msec/* (default: 0.70 msec/g' ./0001-bore.patch
             sed -i -e 's/= 750000ULL;/= 700000ULL;/g' ./0001-bore.patch
             export NEW=$(sha256sum 0001-bore.patch | awk '{ print $1}')
