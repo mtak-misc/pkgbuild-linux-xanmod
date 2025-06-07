@@ -127,7 +127,7 @@ jobs:
             echo "sed -i 's/${OLD}/${NEW}/g' PKGBUILD" | bash
             echo "sed -i 's/_major=${OLDVERSION}/_major=6.${{ github.event.inputs.new_kernel_minor_ver }}/g' PKGBUILD" | bash
             export OLD=$(sha256sum 0004-glitched-eevdf-additions.patch | awk '{ print $1}')
-            curl -L https://raw.githubusercontent.com/Frogging-Family/linux-tkg/refs/heads/master/linux-tkg-patches/6.15/0003-glitched-eevdf-additions.patch -o 0004-glitched-eevdf-additions.patch
+            sed -i 's/const_debug/__read_mostly/g' 0004-glitched-eevdf-additions.patch
             export NEW=$(sha256sum 0004-glitched-eevdf-additions.patch | awk '{ print $1}')
             echo "sed -i 's/${OLD}/${NEW}/g' PKGBUILD" | bash
           fi
