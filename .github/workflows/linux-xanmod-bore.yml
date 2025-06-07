@@ -141,6 +141,7 @@ jobs:
             sed -i -e 's/750000ULL/700000ULL/g' 0004-glitched-eevdf-additions.patch
             export NEW=$(sha256sum 0004-glitched-eevdf-additions.patch | awk '{ print $1}')
             echo "sed -i 's/${OLD}/${NEW}/g' PKGBUILD" | bash
+            sed -i '/0005-o3-optimization.patch/d' PKGBUILD
           fi
           if  [ "${{ github.event.inputs.new_kernel_patch_ver }}" != "" ] && [ "${{ github.event.inputs.new_kernel_patch_ver }}" != ${OLDPATCHVERSION} ]; then
             curl -LO https://sourceforge.net/projects/xanmod/files/releases/${BRANCH}/6.${MINORVERSION}.${{ github.event.inputs.new_kernel_patch_ver }}-xanmod1/patch-6.${MINORVERSION}.${{ github.event.inputs.new_kernel_patch_ver }}-xanmod1.xz
