@@ -6,4 +6,4 @@ useradd builder -u ${USERID} -m -G wheel && echo "builder ALL=(ALL) NOPASSWD: AL
 #chown builder -R ..
 #chown builder -R /tmp
 su builder -c "gpg --recv 38DBBDC86092693E"
-cd ./linux-xanmod-bore ; su builder -c "yes '' | MAKEFLAGS=\"-j $(nproc)\" env _config=config _compress_modules=y _use_numa=y _use_tracers=n _microarchitecture=92 _use_O3=y makepkg --noconfirm -sc"
+cd ./linux-xanmod-bore ; su builder -c "yes '' | MAKEFLAGS=\"-j $(nproc)\" env _config=config _compress_modules=y _use_numa=y _use_tracers=n _microarchitecture=92 _use_O3=n makepkg --noconfirm -sc"
