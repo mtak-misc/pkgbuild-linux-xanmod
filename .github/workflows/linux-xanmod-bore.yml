@@ -102,6 +102,7 @@ jobs:
         run: |
           cd linux-xanmod-bore
           sed -i '/scripts\/config --enable STACK_VALIDATION/a \ \ scripts\/config --set-val CONFIG_X86_64_VERSION 2' PKGBUILD
+          sed -i 'CONFIG_X86_64_VERSION/a \ \ grep CONFIG_X86_64_VERSION .config' PKGBUILD
           echo "here"
           grep "CONFIG_X86_64_VERSION" PKGBUILD
           BRANCH=$(grep "_sf_branch=" PKGBUILD)
