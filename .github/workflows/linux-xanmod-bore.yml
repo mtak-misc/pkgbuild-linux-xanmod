@@ -131,7 +131,7 @@ jobs:
             sed -i 's/const_debug/__read_mostly/g' 0004-glitched-eevdf-additions.patch
             export NEW=$(sha256sum 0004-glitched-eevdf-additions.patch | awk '{ print $1}')
             echo "sed -i 's/${OLD}/${NEW}/g' PKGBUILD" | bash
-            sed -i '/0005-o3-optimization.patch/d' PKGBUILD
+            
           fi
           if [ "${{ github.event.inputs.new_bore_ver }}" != "" ]; then
             export OLD=$(sha256sum 0001-bore.patch | awk '{ print $1}')
