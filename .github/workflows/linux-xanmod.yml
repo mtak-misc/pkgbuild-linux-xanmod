@@ -89,6 +89,9 @@ jobs:
       - name: Modify PKGBUILD
         run: |
           cd linux-xanmod
+          sed -i '/CONFIG_SECURITY_TOMOYO_ACTIVATION_TRIGGER/a \ \ scripts\/config --set-val CONFIG_X86_64_VERSION 2' PKGBUILD
+          sed -i '/CONFIG_SECURITY_TOMOYO_ACTIVATION_TRIGGER/a \ \ scripts\/config --set-val CONFIG_LOCALVERSION "-x64v2"' PKGBUILD
+
           BRANCH=$(grep "_sf_branch=" PKGBUILD)
           OLDBRANCH="${BRANCH#_sf_branch=}"
           BRANCH="main"
