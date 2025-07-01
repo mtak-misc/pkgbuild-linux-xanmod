@@ -173,7 +173,7 @@ jobs:
         uses: docker://archlinux:latest
         with:
           entrypoint: '/bin/sh'
-          args: ./build.sh ${{ env.USERID }} 
+          args: ./build-bore.sh ${{ env.USERID }} 
       - name: Upload packages
         uses: actions/upload-artifact@v4
         with:
