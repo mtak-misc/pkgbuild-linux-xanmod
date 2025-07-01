@@ -132,7 +132,7 @@ jobs:
         uses: docker://archlinux:latest
         with:
           entrypoint: '/bin/sh'
-          args: ./gcc-build.sh ${{ env.USERID }} 
+          args: ./build.sh ${{ env.USERID }} 
       - uses: actions/upload-artifact@v4
         with:
           name: linux-xanmod
