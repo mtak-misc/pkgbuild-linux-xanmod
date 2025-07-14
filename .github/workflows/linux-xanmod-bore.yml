@@ -79,7 +79,7 @@ jobs:
 
           if [ "${{ github.event.inputs.bore_repository }}" == "true" ]; then
             export OLD=$(sha256sum 0001-bore.patch | awk '{ print $1}')
-            cp bore/patches/stable/linux-6.${MINORVERSION}-bore/0001-linux*-bore-*.patch ./0001-bore.patch
+            cp ../bore/patches/stable/linux-6.${MINORVERSION}-bore/0001-linux*-bore-*.patch ./0001-bore.patch
             sed -i -e 's/scaling = SCHED_TUNABLESCALING_LOG/scaling = SCHED_TUNABLESCALING_NONE/' ./0001-bore.patch
             export NEW=$(sha256sum 0001-bore.patch | awk '{ print $1}')
             echo "sed -i 's/${OLD}/${NEW}/g' PKGBUILD" | bash
