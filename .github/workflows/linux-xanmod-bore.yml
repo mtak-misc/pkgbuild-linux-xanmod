@@ -15,8 +15,8 @@ on:
         type: string
         required: false
         description: "New kernel patch version"
-      new_bore_ver:
-        type: string
+      bore_repository:
+        type: boolean
         required: false
         description: "New BORE version"
 jobs:
@@ -26,6 +26,11 @@ jobs:
     steps:
       - name: Checkout repo
         uses: actions/checkout@v4
+      - name: Checkout bore repo
+        uses: actions/checkout@v4
+        with:
+          repository: 'firelzrd/bore-scheduler'
+          path: bore
       - name: Cleanup
 #        if: ${{ 'true' == 'false' }}
         run: |
@@ -71,9 +76,10 @@ jobs:
             echo "sed -i 's/${OLD}/${NEW}/g' PKGBUILD" | bash
             
           fi
-          if [ "${{ github.event.inputs.new_bore_ver }}" != "" ]; then
+
+          if [ "${{ github.event.inputs.bore_repository }}" == "true" ]; then
             export OLD=$(sha256sum 0001-bore.patch | awk '{ print $1}')
-            curl -L https://raw.githubusercontent.com/firelzrd/bore-scheduler/main/patches/stable/linux-6.${MINORVERSION}-bore/0001-linux6.${MINORVERSION}.6-bore-${{ github.event.inputs.new_bore_ver }}.patch -o 0001-bore.patch
+            cp bore/patches/stable/linux-6.${MINORVERSION}-bore/0001-linux*-bore-*.patch ./0001-bore.patch
             sed -i -e 's/scaling = SCHED_TUNABLESCALING_LOG/scaling = SCHED_TUNABLESCALING_NONE/' ./0001-bore.patch
             export NEW=$(sha256sum 0001-bore.patch | awk '{ print $1}')
             echo "sed -i 's/${OLD}/${NEW}/g' PKGBUILD" | bash
