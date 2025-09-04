@@ -65,7 +65,14 @@ jobs:
           MINORVERSION=${OLDMINORVERSION}
           XANMOD=$(grep "xanmod=" PKGBUILD)
           OLDXANMOD="${XANMOD#*"="}"
+          NEWXANMOD="1"
 
+          if [ "${{ github.event.inputs.xanmod }}" != "" ] && [ "${{ github.event.inputs.xanmod }}" != ${OLDXANMOD} ]; then
+            NEWXANMOD=${{ github.event.inputs.xanmod }}
+            export OLD=$(echo "xanmod="${OLDXANMOD})
+            export NEW=$(echo "xanmod="${{ github.event.inputs.xanmod }})
+            echo "sed -i 's/${OLD}/${NEW}/g' PKGBUILD" | bash
+          fi
           if [ "${{ github.event.inputs.new_kernel_minor_ver }}" != "" ] && [ "${{ github.event.inputs.new_kernel_minor_ver }}" != ${OLDMINORVERSION} ]; then
             MINORVERSION="${{ github.event.inputs.new_kernel_minor_ver }}"
           fi
@@ -90,19 +97,14 @@ jobs:
             echo "sed -i 's/${OLD}/${NEW}/g' PKGBUILD" | bash
           fi
           if  [ "${{ github.event.inputs.new_kernel_patch_ver }}" != "" ] && [ "${{ github.event.inputs.new_kernel_patch_ver }}" != ${OLDPATCHVERSION} ]; then
-            curl -LO https://sourceforge.net/projects/xanmod/files/releases/${BRANCH}/6.${MINORVERSION}.${{ github.event.inputs.new_kernel_patch_ver }}-xanmod1/patch-6.${MINORVERSION}.${{ github.event.inputs.new_kernel_patch_ver }}-xanmod1.xz
-            export NEW=$(sha256sum patch-6.${MINORVERSION}.${{ github.event.inputs.new_kernel_patch_ver }}-xanmod1.xz | awk '{ print $1}')
-            curl -LO https://sourceforge.net/projects/xanmod/files/releases/${OLDBRANCH}/${OLDVERSION}.${OLDPATCHVERSION}-xanmod1/patch-${OLDVERSION}.${OLDPATCHVERSION}-xanmod1.xz
-            export OLD=$(sha256sum patch-${OLDVERSION}.${OLDPATCHVERSION}-xanmod1.xz | awk '{ print $1}')
+            curl -LO https://sourceforge.net/projects/xanmod/files/releases/${BRANCH}/6.${MINORVERSION}.${{ github.event.inputs.new_kernel_patch_ver }}-xanmod${NEWXANMOD}/patch-6.${MINORVERSION}.${{ github.event.inputs.new_kernel_patch_ver }}-xanmod${NEWXANMOD}.xz
+            export NEW=$(sha256sum patch-6.${MINORVERSION}.${{ github.event.inputs.new_kernel_patch_ver }}-xanmod${NEWXANMOD}.xz | awk '{ print $1}')
+            curl -LO https://sourceforge.net/projects/xanmod/files/releases/${OLDBRANCH}/${OLDVERSION}.${OLDPATCHVERSION}-xanmod${OLDXANMOD}/patch-${OLDVERSION}.${OLDPATCHVERSION}-xanmod${OLDXANMOD}.xz
+            export OLD=$(sha256sum patch-${OLDVERSION}.${OLDPATCHVERSION}-xanmod${OLDXANMOD}.xz | awk '{ print $1}')
             echo "sed -i 's/${OLD}/${NEW}/g' PKGBUILD" | bash
             echo "sed -i 's/pkgver=\${_major}."${OLDPATCHVERSION}"/pkgver=\${_major}."${{ github.event.inputs.new_kernel_patch_ver }}"/g' PKGBUILD" | bash
           fi
 
-          if [ "${{ github.event.inputs.xanmod }}" != "" ] && [ "${{ github.event.inputs.xanmod }}" != ${OLDXANMOD} ]; then
-            export OLD=$(echo "xanmod="${OLDXANMOD})
-            export NEW=$(echo "xanmod="${{ github.event.inputs.xanmod }})
-            echo "sed -i 's/${OLD}/${NEW}/g' PKGBUILD" | bash
-          fi
 #            export OLD=$(sha256sum 0002-glitched-cfs.patch | awk '{ print $1}')
 #            curl -L https://github.com/Frogging-Family/linux-tkg/raw/master/linux-tkg-patches/6.${MINORVERSION}/0003-glitched-cfs.patch -o 0002-glitched-cfs.patch
 #            export NEW=$(sha256sum 0002-glitched-cfs.patch | awk '{ print $1}')
