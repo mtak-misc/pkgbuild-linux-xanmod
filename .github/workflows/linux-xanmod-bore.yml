@@ -64,7 +64,7 @@ jobs:
           OLDMINORVERSION="${MAJOR#*.}"
           MINORVERSION=${OLDMINORVERSION}
           XANMOD=$(grep "xanmod=" PKGBUILD)
-          OLDXANMOD="${XANMOD#*"."}"
+          OLDXANMOD="${XANMOD#*"="}"
 
           if [ "${{ github.event.inputs.xanmod }}" != "" ] && [ "${{ github.event.inputs.xanmod }}" != ${OLDXANMOD} ]; then
             export OLD=$(echo "xanmod="${OLDXANMOD})
