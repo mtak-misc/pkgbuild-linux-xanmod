@@ -36,7 +36,7 @@ jobs:
           repository: 'firelzrd/bore-scheduler'
           path: bore
       - name: Cleanup
-#        if: ${{ 'true' == 'false' }}
+        if: ${{ 'true' == 'false' }}
         run: |
           sh ./cleanup.sh
       - name: Checkount linux-xanmod-bore repo
@@ -69,6 +69,9 @@ jobs:
           if [ "${{ github.event.inputs.xanmod }}" != "" ] && [ "${{ github.event.inputs.xanmod }}" != ${OLDXANMOD} ]; then
             export OLD=$(echo "xanmod="${OLDXANMOD})
             export NEW=$(echo "xanmod="${{ github.event.inputs.xanmod }})
+            echo "OLD:"$OLD
+            echo "NEW:"$NEW
+            
             echo "sed -i 's/${OLD}/${NEW}/g' PKGBUILD" | bash
           fi
 
