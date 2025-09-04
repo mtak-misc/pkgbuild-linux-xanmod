@@ -19,6 +19,10 @@ on:
         type: boolean
         required: false
         description: "Use BORE repository"
+      xanmod:
+        type: string
+        required: false
+        description: "Xanmod release number"
 jobs:
   build:
     runs-on: ubuntu-latest
