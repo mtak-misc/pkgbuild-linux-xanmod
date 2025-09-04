@@ -67,8 +67,9 @@ jobs:
           OLDXANMOD="${XANMOD#*"."}"
 
           if [ "${{ github.event.inputs.xanmod }}" != "" ] && [ "${{ github.event.inputs.xanmod }}" != ${OLDXANMOD} ]; then
-            export OLD=$(echo "xanmod="${OLDXANMOD}
-            export NEW=$(echo "xanmod="${}
+            export OLD=$(echo "xanmod="${OLDXANMOD})
+            export NEW=$(echo "xanmod="${{ github.event.inputs.xanmod }})
+            echo "sed -i 's/${OLD}/${NEW}/g' PKGBUILD" | bash
           fi
 
           if [ "${{ github.event.inputs.new_kernel_minor_ver }}" != "" ] && [ "${{ github.event.inputs.new_kernel_minor_ver }}" != ${OLDMINORVERSION} ]; then
