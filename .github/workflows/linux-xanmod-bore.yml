@@ -63,7 +63,13 @@ jobs:
           OLDVERSION="${MAJOR#_major=}"
           OLDMINORVERSION="${MAJOR#*.}"
           MINORVERSION=${OLDMINORVERSION}
-          
+          XANMOD=$(grep "xanmod=" PKGBUILD)
+          OLDXANMOD="${XANMOD#*"."}"
+
+          if [ "${{ github.event.inputs.xanmod }}" != "" ] && [ "${{ github.event.inputs.xanmod }}" != ${OLDXANMOD} ]; then
+            
+          fi
+
           if [ "${{ github.event.inputs.new_kernel_minor_ver }}" != "" ] && [ "${{ github.event.inputs.new_kernel_minor_ver }}" != ${OLDMINORVERSION} ]; then
             MINORVERSION="${{ github.event.inputs.new_kernel_minor_ver }}"
           fi
@@ -78,7 +84,6 @@ jobs:
             sed -i 's/const_debug/__read_mostly/g' 0004-glitched-eevdf-additions.patch
             export NEW=$(sha256sum 0004-glitched-eevdf-additions.patch | awk '{ print $1}')
             echo "sed -i 's/${OLD}/${NEW}/g' PKGBUILD" | bash
-            
           fi
 
           if [ "${{ github.event.inputs.bore_repository }}" == "true" ]; then
