@@ -36,7 +36,7 @@ jobs:
           repository: 'firelzrd/bore-scheduler'
           path: bore
       - name: Cleanup
-        if: ${{ 'true' == 'false' }}
+#        if: ${{ 'true' == 'false' }}
         run: |
           sh ./cleanup.sh
       - name: Checkount linux-xanmod-bore repo
