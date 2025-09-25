@@ -6,6 +6,7 @@ on:
       use_edge:
         type: boolean
         required: false
+        default: false
         description: "Use edge"
       new_kernel_minor_ver:
         type: string
@@ -18,6 +19,7 @@ on:
       bore_repository:
         type: boolean
         required: false
+        default: false
         description: "Use BORE repository"
       xanmod:
         type: string
@@ -53,7 +55,7 @@ jobs:
           BRANCH=$(grep "_sf_branch=" PKGBUILD)
           OLDBRANCH="${BRANCH#_sf_branch=}"
           BRANCH="main"
-          if [ "${{ github.event.inputs.use_edge }}" == "true" ]; then
+          if [ "${{ github.event.inputs.use_edge }}" = "true" ]; then
             sed -i 's/_sf_branch=main/_sf_branch=edge/g' PKGBUILD
             BRANCH="edge"
           fi
