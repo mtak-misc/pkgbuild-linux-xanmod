@@ -31,9 +31,9 @@ jobs:
 #    container: archlinux:latest    
     steps:
       - name: Checkout repo
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
       - name: Checkout bore repo
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           repository: 'firelzrd/bore-scheduler'
           path: bore
