@@ -85,11 +85,7 @@ jobs:
             export OLD=$(sha256sum linux-${OLDVERSION}.tar.xz | awk '{ print $1}')
             echo "sed -i 's/${OLD}/${NEW}/g' PKGBUILD" | bash
             echo "sed -i 's/_major=${OLDVERSION}/_major=6.${{ github.event.inputs.new_kernel_minor_ver }}/g' PKGBUILD" | bash
-            export OLD=$(sha256sum 0004-glitched-eevdf-additions.patch | awk '{ print $1}')
-            sed -i 's/const_debug/__read_mostly/g' 0004-glitched-eevdf-additions.patch
-            export NEW=$(sha256sum 0004-glitched-eevdf-additions.patch | awk '{ print $1}')
-            echo "sed -i 's/${OLD}/${NEW}/g' PKGBUILD" | bash
-          fi
+           fi
 
           if [ "${{ github.event.inputs.bore_repository }}" = "true" ]; then
             export OLD=$(sha256sum 0001-bore.patch | awk '{ print $1}')
