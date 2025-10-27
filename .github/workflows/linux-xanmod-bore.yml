@@ -25,6 +25,12 @@ on:
         type: string
         required: false
         description: "Xanmod release number"
+      bore_patch_mode:
+        type: boolean
+        required: false
+        default: false
+        description: "When true: concatenate all BORE patches (concat). When false: copy a single 0001-linux*bore*.patch file (single, default)."
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -88,11 +94,30 @@ jobs:
            fi
 
           if [ "${{ github.event.inputs.bore_repository }}" = "true" ]; then
-            export OLD=$(sha256sum 0001-bore.patch | awk '{ print $1}')
-            cat ../bore/patches/stable/linux-6.${MINORVERSION}-bore/*.patch > ./0001-bore.patch
+            # bore_patch_mode is boolean: true => concat (all patches), false => single (copy one matching patch). default is false (single)
+            SRC_DIR="../bore/patches/stable/linux-6.${MINORVERSION}-bore"
+            if [ "${{ github.event.inputs.bore_patch_mode }}" = "true" ]; then
+              # concat all patches (original behaviour)
+              OLD=$(sha256sum 0001-bore.patch | awk '{ print $1}' 2>/dev/null || echo "")
+              cat ${SRC_DIR}/*.patch > ./0001-bore.patch
+            else
+              # single mode: copy the first 0001-linux*bore*.patch found and name it 0001-bore.patch
+              MATCH=$(ls ${SRC_DIR}/0001-linux*bore*.patch 2>/dev/null | head -n1 || true)
+              if [ -z "${MATCH}" ]; then
+                echo "No matching 0001-linux*bore*.patch found in ${SRC_DIR}" >&2
+                exit 1
+              fi
+              # capture old sha if present
+              OLD=$(sha256sum 0001-bore.patch | awk '{ print $1}' 2>/dev/null || echo "")
+              cp "${MATCH}" ./0001-bore.patch
+            fi
             sed -i -e 's/scaling = SCHED_TUNABLESCALING_LOG/scaling = SCHED_TUNABLESCALING_NONE/' ./0001-bore.patch
-            export NEW=$(sha256sum 0001-bore.patch | awk '{ print $1}')
-            echo "sed -i 's/${OLD}/${NEW}/g' PKGBUILD" | bash
+            NEW=$(sha256sum 0001-bore.patch | awk '{ print $1}')
+            if [ -n "${OLD}" ]; then
+              echo "sed -i 's/${OLD}/${NEW}/g' PKGBUILD" | bash
+            else
+              echo "sed -i 's/0001-bore.patch/${NEW}/g' PKGBUILD || true"
+            fi
             sed -i '/0002-sched-fair-Prefer-full-idle-SMT-cores.patch/d' PKGBUILD
           fi
           if  [ "${{ github.event.inputs.new_kernel_patch_ver }}" != "" ] && [ "${{ github.event.inputs.new_kernel_patch_ver }}" != "${OLDPATCHVERSION}" ]; then
@@ -131,4 +156,3 @@ jobs:
         with:
           name: linux-xanmod-bore
           path: ${{ github.workspace }}/linux-xanmod-bore/*.pkg.tar.zst
-        
