@@ -29,7 +29,7 @@ on:
         type: boolean
         required: false
         default: false
-        description: "When true: concatenate all BORE patches (concat). When false: copy a single 0001-linux*bore*.patch file (single, default)."
+        description: "BORE patches mode (concat or single. single default)."
 
 jobs:
   build:
