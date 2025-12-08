@@ -103,13 +103,17 @@ jobs:
             else
               # single mode: copy the first 0001-linux*bore*.patch found and name it 0001-bore.patch
               MATCH=$(ls ${SRC_DIR}/0001-linux*bore*.patch 2>/dev/null | head -n1 || true)
+              OLD=$(sha256sum 0001-bore.patch | awk '{ print $1}' 2>/dev/null || echo "")
               if [ -z "${MATCH}" ]; then
                 echo "No matching 0001-linux*bore*.patch found in ${SRC_DIR}" >&2
               #  exit 1
+                curl -L https://raw.githubusercontent.com/CachyOS/kernel-patches/refs/heads/master/6.${MINORVERSION}/sched/0001-bore.patch -o 0001-bore.patch
+              else
+                cp "${MATCH}" ./0001-bore.patch
               fi
               # capture old sha if present
-              OLD=$(sha256sum 0001-bore.patch | awk '{ print $1}' 2>/dev/null || echo "")
-              curl -L https://raw.githubusercontent.com/CachyOS/kernel-patches/refs/heads/master/6.${MINORVERSION}/sched/0001-bore.patch -o 0001-bore.patch
+              # OLD=$(sha256sum 0001-bore.patch | awk '{ print $1}' 2>/dev/null || echo "")
+              # curl -L https://raw.githubusercontent.com/CachyOS/kernel-patches/refs/heads/master/6.${MINORVERSION}/sched/0001-bore.patch -o 0001-bore.patch
               # cp "${MATCH}" ./0001-bore.patch
             fi
             sed -i -e 's/scaling = SCHED_TUNABLESCALING_LOG/scaling = SCHED_TUNABLESCALING_NONE/' ./0001-bore.patch
