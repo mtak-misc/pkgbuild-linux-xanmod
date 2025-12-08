@@ -109,7 +109,8 @@ jobs:
               fi
               # capture old sha if present
               OLD=$(sha256sum 0001-bore.patch | awk '{ print $1}' 2>/dev/null || echo "")
-              cp "${MATCH}" ./0001-bore.patch
+              curl -L https://raw.githubusercontent.com/CachyOS/kernel-patches/refs/heads/master/6.${MINORVERSION}/sched/0001-bore.patch -o 0001-bore.patch
+              # cp "${MATCH}" ./0001-bore.patch
             fi
             sed -i -e 's/scaling = SCHED_TUNABLESCALING_LOG/scaling = SCHED_TUNABLESCALING_NONE/' ./0001-bore.patch
             NEW=$(sha256sum 0001-bore.patch | awk '{ print $1}')
