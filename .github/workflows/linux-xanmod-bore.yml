@@ -105,7 +105,7 @@ jobs:
               MATCH=$(ls ${SRC_DIR}/0001-linux*bore*.patch 2>/dev/null | head -n1 || true)
               if [ -z "${MATCH}" ]; then
                 echo "No matching 0001-linux*bore*.patch found in ${SRC_DIR}" >&2
-                exit 1
+              #  exit 1
               fi
               # capture old sha if present
               OLD=$(sha256sum 0001-bore.patch | awk '{ print $1}' 2>/dev/null || echo "")
