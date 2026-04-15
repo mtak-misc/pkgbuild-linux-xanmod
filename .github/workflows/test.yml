@@ -1,4 +1,4 @@
-name: build-linux-xanmod-bore
+name: test
 
 on:
   workflow_dispatch:
