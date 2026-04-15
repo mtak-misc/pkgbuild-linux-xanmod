@@ -54,7 +54,7 @@ jobs:
           repository: 'firelzrd/bore-scheduler'
           path: bore
       - name: Cleanup
-#        if: ${{ 'true' == 'false' }}
+        if: ${{ 'true' == 'false' }}
         run: |
           sh ./cleanup.sh
       - name: Checkount linux-xanmod-bore repo
@@ -68,7 +68,7 @@ jobs:
           cd linux-xanmod-bore
           KERNEL_MAJOR="${{ github.event.inputs.kernel_major_ver }}"
           BRANCH=$(grep "_branch=" PKGBUILD)
-          sed -i "s/${BRANCH}/_branch=${KERNEL_MAJOR}.x/g" PKGBUILD
+          echo "sed -i 's/${BRANCH}/_branch=${KERNEL_MAJOR}.x/g' PKGBUILD" | bash
 
           sed -i '/scripts\/config --enable STACK_VALIDATION/a \ \ scripts\/config --set-val CONFIG_X86_64_VERSION 2' PKGBUILD
           sed -i '/scripts\/config --enable STACK_VALIDATION/a \ \ scripts\/config --set-val CONFIG_LOCALVERSION "-x64v2"' PKGBUILD
