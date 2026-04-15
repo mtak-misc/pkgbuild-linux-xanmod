@@ -61,6 +61,127 @@ jobs:
         uses: actions/checkout@v6
         with: 
           repository: micros24/linux-xanmod-bore
+          ref: "${{ github.event.inputs.linux_xanmod_bore_ref }}"
+          path: linux-xanmod-bore
+      - name: Apply patches
+        run: |
+          cd linux-xanmod-bore
+          KERNEL_MAJOR="${{ github.event.inputs.kernel_major_ver }}"
+          sed -i '/scripts\/config --enable STACK_VALIDATION/a \ \ scripts\/config --set-val CONFIG_X86_64_VERSION 2' PKGBUILD
+          sed -i '/scripts\/config --enable STACK_VALIDATION/a \ \ scripts\/config --set-val CONFIG_LOCALVERSION "-x64v2"' PKGBUILD
+          BRANCH=$(grep "_sf_branch=" PKGBUILD)
+          OLDBRANCH="${BRANCH#_sf_branch=}"
+          BRANCH="main"
+          if [ "${{ github.event.inputs.use_edge }}" = "true" ]; then
+            sed -i 's/_sf_branch=main/_sf_branch=edge/g' PKGBUILD
+            BRANCH="edge"
+          fi
+          PKGVERSION=$(grep "pkgver=" PKGBUILD)
+          OLDPATCHVERSION="${PKGVERSION#*"."}"
+          MAJOR=$(grep "_major=" PKGBUILD)
+          OLDVERSION="${MAJOR#_major=}"
+          OLDMINORVERSION="${MAJOR#*.}"
+          MINORVERSION=${OLDMINORVERSION}
+          XANMOD=$(grep "xanmod=" PKGBUILD)
+          OLDXANMOD="${XANMOD#*"="}"
+          NEWXANMOD="1"
+
+          if [ "${{ github.event.inputs.xanmod }}" != "" ] && [ "${{ github.event.inputs.xanmod }}" != "${OLDXANMOD}" ]; then
+            NEWXANMOD=${{ github.event.inputs.xanmod }}
+            export OLD=$(echo "xanmod="${OLDXANMOD})
+            export NEW=$(echo "xanmod="${{ github.event.inputs.xanmod }})
+            echo "sed -i 's/${OLD}/${NEW}/g' PKGBUILD" | bash
+          fi
+          if [ "${{ github.event.inputs.new_kernel_minor_ver }}" != "" ] && [ "${{ github.event.inputs.new_kernel_minor_ver }}" != "${OLDMINORVERSION}" ]; then
+            MINORVERSION="${{ github.event.inputs.new_kernel_minor_ver }}"
+          fi
+          if [ "${{ github.event.inputs.new_kernel_minor_ver }}" != "" ] && [ "${{ github.event.inputs.new_kernel_minor_ver }}" != "${OLDMINORVERSION}" ]; then
+            curl -LO https://cdn.kernel.org/pub/linux/kernel/v${KERNEL_MAJOR}.x/linux-${KERNEL_MAJOR}.${{ github.event.inputs.new_kernel_minor_ver }}.tar.xz
+            export NEW=$(sha256sum linux-${KERNEL_MAJOR}.${{ github.event.inputs.new_kernel_minor_ver }}.tar.xz | awk '{ print $1}')
+            curl -LO https://cdn.kernel.org/pub/linux/kernel/v${KERNEL_MAJOR}.x/linux-${OLDVERSION}.tar.xz
+            export OLD=$(sha256sum linux-${OLDVERSION}.tar.xz | awk '{ print $1}')
+            echo "sed -i 's/${OLD}/${NEW}/g' PKGBUILD" | bash
+            echo "sed -i 's/_major=${OLDVERSION}/_major=${KERNEL_MAJOR}.${{ github.event.inputs.new_kernel_minor_ver }}/g' PKGBUILD" | bash
+           fi
+
+          if [ "${{ github.event.inputs.bore_repository }}" = "true" ]; then
+            # bore_patch_mode is boolean: true => concat (all patches), false => single (copy one matching patch). default is false (single)
+            SRC_DIR="../bore/patches/stable/linux-${KERNEL_MAJOR}.${MINORVERSION}-bore"
+            if [ "${{ github.event.inputs.bore_patch_mode }}" = "true" ]; then
+              # concat all patches (original behaviour)
+              OLD=$(sha256sum 0001-bore.patch | awk '{ print $1}' 2>/dev/null || echo "")
+              cat ${SRC_DIR}/*.patch > ./0001-bore.patch
+            else
+              # single mode: copy the first 0001-linux*bore*.patch found and name it 0001-bore.patch
+              MATCH=$(ls ${SRC_DIR}/0001-linux*bore*.patch 2>/dev/null | head -n1 || true)
+              OLD=$(sha256sum 0001-bore.patch | awk '{ print $1}' 2>/dev/null || echo "")
+              if [ -z "${MATCH}" ]; then
+                echo "No matching 0001-linux*bore*.patch found in ${SRC_DIR}" >&2
+              #  exit 1
+                curl -L https://raw.githubusercontent.com/CachyOS/kernel-patches/refs/heads/master/${KERNEL_MAJOR}.${MINORVERSION}/sched/0001-bore.patch -o 0001-bore.patch
+              else
+                cp "${MATCH}" ./0001-bore.patch
+              fi
+            fi
+            sed -i -e 's/scaling = SCHED_TUNABLESCALING_LOG/scaling = SCHED_TUNABLESCALING_NONE/' ./0001-bore.patch
+            NEW=$(sha256sum 0001-bore.patch | awk '{ print $1}')
+            if [ -n "${OLD}" ]; then
+              echo "sed -i 's/${OLD}/${NEW}/g' PKGBUILD" | bash
+            else
+              echo "sed -i 's/0001-bore.patch/${NEW}/g' PKGBUILD || true"
+            fi
+            sed -i '/0002-sched-fair-Prefer-full-idle-SMT-cores.patch/d' PKGBUILD
+          fi
+          if  [ "${{ github.event.inputs.new_kernel_patch_ver }}" != "" ] && [ "${{ github.event.inputs.new_kernel_patch_ver }}" != "${OLDPATCHVERSION}" ]; then
+            curl -LO https://sourceforge.net/projects/xanmod/files/releases/${BRANCH}/${KERNEL_MAJOR}.${MINORVERSION}.${{ github.event.inputs.new_kernel_patch_ver }}-xanmod${NEWXANMOD}/patch-${KERNEL_MAJOR}.${MINORVERSION}.${{ github.event.inputs.new_kernel_patch_ver }}-xanmod${NEWXANMOD}.xz
+            export NEW=$(sha256sum patch-${KERNEL_MAJOR}.${MINORVERSION}.${{ github.event.inputs.new_kernel_patch_ver }}-xanmod${NEWXANMOD}.xz | awk '{ print $1}')
+            curl -LO https://sourceforge.net/projects/xanmod/files/releases/${OLDBRANCH}/${OLDVERSION}.${OLDPATCHVERSION}-xanmod${OLDXANMOD}/patch-${OLDVERSION}.${OLDPATCHVERSION}-xanmod${OLDXANMOD}.xz
+            export OLD=$(sha256sum patch-${OLDVERSION}.${OLDPATCHVERSION}-xanmod${OLDXANMOD}.xz | awk '{ print $1}')
+            echo "sed -i 's/${OLD}/${NEW}/g' PKGBUILD" | bash
+            echo "sed -i 's/pkgver=\${_major}."${OLDPATCHVERSION}"/pkgver=\${_major}."${{ github.event.inputs.new_kernel_patch_ver }}"/g' PKGBUILD" | bash
+          fi
+
+      - name: Set UserID
+        run: |
+          echo "USERID=$(id -u $(whoami))" >> $GITHUB_ENV
+        env: 
+          USERID: ''          
+      - name: Build
+        uses: docker://archlinux:latest
+        with:
+          entrypoint: '/bin/sh'
+          args: ./build-bore.sh ${{ env.USERID }} 
+      - name: Upload packages
+        uses: actions/upload-artifact@v7
+        with:
+          name: linux-xanmod-bore
+          path: ${{ github.workspace }}/linux-xanmod-bore/*.pkg.tar.zst        description: "Xanmod release number"
+      bore_patch_mode:
+        type: boolean
+        required: false
+        default: false
+        description: "BORE patches mode (concat or single. single default)."
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+#    container: archlinux:latest    
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v6
+      - name: Checkout bore repo
+        uses: actions/checkout@v6
+        with:
+          repository: 'firelzrd/bore-scheduler'
+          path: bore
+      - name: Cleanup
+#        if: ${{ 'true' == 'false' }}
+        run: |
+          sh ./cleanup.sh
+      - name: Checkount linux-xanmod-bore repo
+        uses: actions/checkout@v6
+        with: 
+          repository: micros24/linux-xanmod-bore
           ref: "6.19"
           path: linux-xanmod-bore
       - name: Apply patches
