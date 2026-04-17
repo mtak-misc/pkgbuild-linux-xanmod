@@ -66,10 +66,12 @@ jobs:
       - name: Apply patches
         run: |
           cd linux-xanmod-bore
-          KERNEL_MAJOR="${{ github.event.inputs.kernel_major_ver }}"
-          BRANCH=$(grep "^_branch=" PKGBUILD)
-          echo "sed -i 's/${BRANCH}/_branch=${KERNEL_MAJOR}.x/g' PKGBUILD" | bash
-
+          if [ "${{ github.event.inputs.kernel_major_ver }}" != "" ]; then
+            KERNEL_MAJOR="${{ github.event.inputs.kernel_major_ver }}"
+            BRANCH=$(grep "^_branch=" PKGBUILD)
+            echo "sed -i 's/${BRANCH}/_branch=${KERNEL_MAJOR}.x/g' PKGBUILD" | bash
+          fi
+          
           sed -i '/scripts\/config --enable STACK_VALIDATION/a \ \ scripts\/config --set-val CONFIG_X86_64_VERSION 2' PKGBUILD
           sed -i '/scripts\/config --enable STACK_VALIDATION/a \ \ scripts\/config --set-val CONFIG_LOCALVERSION "-x64v2"' PKGBUILD
           BRANCH=$(grep "_sf_branch=" PKGBUILD)
@@ -82,6 +84,7 @@ jobs:
           PKGVERSION=$(grep "pkgver=" PKGBUILD)
           OLDPATCHVERSION="${PKGVERSION#*"."}"
           MAJOR=$(grep "_major=" PKGBUILD)
+          OLDMAJORVERSION="${MAJOR%%.*}"
           OLDVERSION="${MAJOR#_major=}"
           OLDMINORVERSION="${MAJOR#*.}"
           MINORVERSION=${OLDMINORVERSION}
@@ -101,7 +104,7 @@ jobs:
           if [ "${{ github.event.inputs.new_kernel_minor_ver }}" != "" ] && [ "${{ github.event.inputs.new_kernel_minor_ver }}" != "${OLDMINORVERSION}" ]; then
             curl -LO https://cdn.kernel.org/pub/linux/kernel/v${KERNEL_MAJOR}.x/linux-${KERNEL_MAJOR}.${{ github.event.inputs.new_kernel_minor_ver }}.tar.xz
             export NEW=$(sha256sum linux-${KERNEL_MAJOR}.${{ github.event.inputs.new_kernel_minor_ver }}.tar.xz | awk '{ print $1}')
-            curl -LO https://cdn.kernel.org/pub/linux/kernel/v${KERNEL_MAJOR}.x/linux-${OLDVERSION}.tar.xz
+            curl -LO https://cdn.kernel.org/pub/linux/kernel/v${OLDMAJORVERSION}.x/linux-${OLDVERSION}.tar.xz
             export OLD=$(sha256sum linux-${OLDVERSION}.tar.xz | awk '{ print $1}')
             echo "sed -i 's/${OLD}/${NEW}/g' PKGBUILD" | bash
             echo "sed -i 's/_major=${OLDVERSION}/_major=${KERNEL_MAJOR}.${{ github.event.inputs.new_kernel_minor_ver }}/g' PKGBUILD" | bash
