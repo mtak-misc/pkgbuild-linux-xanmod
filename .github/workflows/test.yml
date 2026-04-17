@@ -116,6 +116,8 @@ jobs:
             export OLD=$(sha256sum linux-${OLDVERSION}.tar.xz | awk '{ print $1}')
             echo "sed -i 's/${OLD}/${NEW}/g' PKGBUILD" | bash
             echo "sed -i 's/_major=${OLDVERSION}/_major=${KERNEL_MAJOR}.${{ github.event.inputs.new_kernel_minor_ver }}/g' PKGBUILD" | bash
+            echo "https://cdn.kernel.org/pub/linux/kernel/v${KERNEL_MAJOR}.x/linux-${KERNEL_MAJOR}.${{ github.event.inputs.new_kernel_minor_ver }}.tar.xz"
+            echo "https://cdn.kernel.org/pub/linux/kernel/v${OLDMAJORVERSION}.x/linux-${OLDVERSION}.tar.xz"
            fi
 
           if [ "${{ github.event.inputs.bore_repository }}" = "true" ]; then
