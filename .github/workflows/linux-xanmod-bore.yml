@@ -1,8 +1,18 @@
-name: build-linux-xanmod-bore
+name: test
 
 on:
   workflow_dispatch:
     inputs:
+      kernel_major_ver:
+        type: string
+        required: false
+        default: "6"
+        description: "Kernel major version (e.g. 6, 7)"
+      linux_xanmod_bore_ref:
+        type: string
+        required: false
+        default: "6.19"
+        description: "linux-xanmod-bore repo branch ref (e.g. 6.19)"
       use_edge:
         type: boolean
         required: false
@@ -51,11 +61,17 @@ jobs:
         uses: actions/checkout@v6
         with: 
           repository: micros24/linux-xanmod-bore
-          ref: "6.19"
+          ref: "${{ github.event.inputs.linux_xanmod_bore_ref }}"
           path: linux-xanmod-bore
       - name: Apply patches
         run: |
           cd linux-xanmod-bore
+          if [ "${{ github.event.inputs.kernel_major_ver }}" != "" ]; then
+            KERNEL_MAJOR="${{ github.event.inputs.kernel_major_ver }}"
+            BRANCH=$(grep "^_branch=" PKGBUILD)
+            echo "sed -i 's/${BRANCH}/_branch=${KERNEL_MAJOR}.x/g' PKGBUILD" | bash
+          fi
+          
           sed -i '/scripts\/config --enable STACK_VALIDATION/a \ \ scripts\/config --set-val CONFIG_X86_64_VERSION 2' PKGBUILD
           sed -i '/scripts\/config --enable STACK_VALIDATION/a \ \ scripts\/config --set-val CONFIG_LOCALVERSION "-x64v2"' PKGBUILD
           BRANCH=$(grep "_sf_branch=" PKGBUILD)
@@ -69,6 +85,7 @@ jobs:
           OLDPATCHVERSION="${PKGVERSION#*"."}"
           MAJOR=$(grep "_major=" PKGBUILD)
           OLDVERSION="${MAJOR#_major=}"
+          OLDMAJORVERSION="${OLDVERSION%%.*}"
           OLDMINORVERSION="${MAJOR#*.}"
           MINORVERSION=${OLDMINORVERSION}
           XANMOD=$(grep "xanmod=" PKGBUILD)
@@ -84,18 +101,28 @@ jobs:
           if [ "${{ github.event.inputs.new_kernel_minor_ver }}" != "" ] && [ "${{ github.event.inputs.new_kernel_minor_ver }}" != "${OLDMINORVERSION}" ]; then
             MINORVERSION="${{ github.event.inputs.new_kernel_minor_ver }}"
           fi
-          if [ "${{ github.event.inputs.new_kernel_minor_ver }}" != "" ] && [ "${{ github.event.inputs.new_kernel_minor_ver }}" != "${OLDMINORVERSION}" ]; then
-            curl -LO https://cdn.kernel.org/pub/linux/kernel/v6.x/linux-6.${{ github.event.inputs.new_kernel_minor_ver }}.tar.xz
-            export NEW=$(sha256sum linux-6.${{ github.event.inputs.new_kernel_minor_ver }}.tar.xz | awk '{ print $1}')
-            curl -LO https://cdn.kernel.org/pub/linux/kernel/v6.x/linux-${OLDVERSION}.tar.xz
+          if [ "${{ github.event.inputs.new_kernel_minor_ver }}" != "" ] && [ "${{ github.event.inputs.new_kernel_minor_ver }}" != "${OLDMINORVERSION}" ] && [ "${{ github.event.inputs.kernel_major_ver }}" == "" ]; then
+            curl -LO https://cdn.kernel.org/pub/linux/kernel/v${OLDMAJORVERSION}.x/linux-${OLDMAJORVERSION}.${{ github.event.inputs.new_kernel_minor_ver }}.tar.xz
+            export NEW=$(sha256sum linux-${KERNEL_MAJOR}.${{ github.event.inputs.new_kernel_minor_ver }}.tar.xz | awk '{ print $1}')
+            curl -LO https://cdn.kernel.org/pub/linux/kernel/v${OLDMAJORVERSION}.x/linux-${OLDVERSION}.tar.xz
             export OLD=$(sha256sum linux-${OLDVERSION}.tar.xz | awk '{ print $1}')
             echo "sed -i 's/${OLD}/${NEW}/g' PKGBUILD" | bash
-            echo "sed -i 's/_major=${OLDVERSION}/_major=6.${{ github.event.inputs.new_kernel_minor_ver }}/g' PKGBUILD" | bash
+            echo "sed -i 's/_major=${OLDVERSION}/_major=${KERNEL_MAJOR}.${{ github.event.inputs.new_kernel_minor_ver }}/g' PKGBUILD" | bash
+          fi
+          if [ "${{ github.event.inputs.new_kernel_minor_ver }}" != "" ] && [ "${{ github.event.inputs.new_kernel_minor_ver }}" != "${OLDMINORVERSION}" ] && [ "${{ github.event.inputs.kernel_major_ver }}" != "" ]; then
+            curl -LO https://cdn.kernel.org/pub/linux/kernel/v${KERNEL_MAJOR}.x/linux-${KERNEL_MAJOR}.${{ github.event.inputs.new_kernel_minor_ver }}.tar.xz
+            export NEW=$(sha256sum linux-${KERNEL_MAJOR}.${{ github.event.inputs.new_kernel_minor_ver }}.tar.xz | awk '{ print $1}')
+            curl -LO https://cdn.kernel.org/pub/linux/kernel/v${OLDMAJORVERSION}.x/linux-${OLDVERSION}.tar.xz
+            export OLD=$(sha256sum linux-${OLDVERSION}.tar.xz | awk '{ print $1}')
+            echo "sed -i 's/${OLD}/${NEW}/g' PKGBUILD" | bash
+            echo "sed -i 's/_major=${OLDVERSION}/_major=${KERNEL_MAJOR}.${{ github.event.inputs.new_kernel_minor_ver }}/g' PKGBUILD" | bash
+            echo "https://cdn.kernel.org/pub/linux/kernel/v${KERNEL_MAJOR}.x/linux-${KERNEL_MAJOR}.${{ github.event.inputs.new_kernel_minor_ver }}.tar.xz"
+            echo "https://cdn.kernel.org/pub/linux/kernel/v${OLDMAJORVERSION}.x/linux-${OLDVERSION}.tar.xz"
            fi
 
           if [ "${{ github.event.inputs.bore_repository }}" = "true" ]; then
             # bore_patch_mode is boolean: true => concat (all patches), false => single (copy one matching patch). default is false (single)
-            SRC_DIR="../bore/patches/stable/linux-6.${MINORVERSION}-bore"
+            SRC_DIR="../bore/patches/stable/linux-${KERNEL_MAJOR}.${MINORVERSION}-bore"
             if [ "${{ github.event.inputs.bore_patch_mode }}" = "true" ]; then
               # concat all patches (original behaviour)
               OLD=$(sha256sum 0001-bore.patch | awk '{ print $1}' 2>/dev/null || echo "")
@@ -107,14 +134,10 @@ jobs:
               if [ -z "${MATCH}" ]; then
                 echo "No matching 0001-linux*bore*.patch found in ${SRC_DIR}" >&2
               #  exit 1
-                curl -L https://raw.githubusercontent.com/CachyOS/kernel-patches/refs/heads/master/6.${MINORVERSION}/sched/0001-bore.patch -o 0001-bore.patch
+                curl -L https://raw.githubusercontent.com/CachyOS/kernel-patches/refs/heads/master/${KERNEL_MAJOR}.${MINORVERSION}/sched/0001-bore.patch -o 0001-bore.patch
               else
                 cp "${MATCH}" ./0001-bore.patch
               fi
-              # capture old sha if present
-              # OLD=$(sha256sum 0001-bore.patch | awk '{ print $1}' 2>/dev/null || echo "")
-              # curl -L https://raw.githubusercontent.com/CachyOS/kernel-patches/refs/heads/master/6.${MINORVERSION}/sched/0001-bore.patch -o 0001-bore.patch
-              # cp "${MATCH}" ./0001-bore.patch
             fi
             sed -i -e 's/scaling = SCHED_TUNABLESCALING_LOG/scaling = SCHED_TUNABLESCALING_NONE/' ./0001-bore.patch
             NEW=$(sha256sum 0001-bore.patch | awk '{ print $1}')
@@ -126,26 +149,14 @@ jobs:
             sed -i '/0002-sched-fair-Prefer-full-idle-SMT-cores.patch/d' PKGBUILD
           fi
           if  [ "${{ github.event.inputs.new_kernel_patch_ver }}" != "" ] && [ "${{ github.event.inputs.new_kernel_patch_ver }}" != "${OLDPATCHVERSION}" ]; then
-            curl -LO https://sourceforge.net/projects/xanmod/files/releases/${BRANCH}/6.${MINORVERSION}.${{ github.event.inputs.new_kernel_patch_ver }}-xanmod${NEWXANMOD}/patch-6.${MINORVERSION}.${{ github.event.inputs.new_kernel_patch_ver }}-xanmod${NEWXANMOD}.xz
-            export NEW=$(sha256sum patch-6.${MINORVERSION}.${{ github.event.inputs.new_kernel_patch_ver }}-xanmod${NEWXANMOD}.xz | awk '{ print $1}')
+            curl -LO https://sourceforge.net/projects/xanmod/files/releases/${BRANCH}/${KERNEL_MAJOR}.${MINORVERSION}.${{ github.event.inputs.new_kernel_patch_ver }}-xanmod${NEWXANMOD}/patch-${KERNEL_MAJOR}.${MINORVERSION}.${{ github.event.inputs.new_kernel_patch_ver }}-xanmod${NEWXANMOD}.xz
+            export NEW=$(sha256sum patch-${KERNEL_MAJOR}.${MINORVERSION}.${{ github.event.inputs.new_kernel_patch_ver }}-xanmod${NEWXANMOD}.xz | awk '{ print $1}')
             curl -LO https://sourceforge.net/projects/xanmod/files/releases/${OLDBRANCH}/${OLDVERSION}.${OLDPATCHVERSION}-xanmod${OLDXANMOD}/patch-${OLDVERSION}.${OLDPATCHVERSION}-xanmod${OLDXANMOD}.xz
             export OLD=$(sha256sum patch-${OLDVERSION}.${OLDPATCHVERSION}-xanmod${OLDXANMOD}.xz | awk '{ print $1}')
             echo "sed -i 's/${OLD}/${NEW}/g' PKGBUILD" | bash
             echo "sed -i 's/pkgver=\${_major}."${OLDPATCHVERSION}"/pkgver=\${_major}."${{ github.event.inputs.new_kernel_patch_ver }}"/g' PKGBUILD" | bash
           fi
 
-#            export OLD=$(sha256sum 0002-glitched-cfs.patch | awk '{ print $1}')
-#            curl -L https://github.com/Frogging-Family/linux-tkg/raw/master/linux-tkg-patches/6.${MINORVERSION}/0003-glitched-cfs.patch -o 0002-glitched-cfs.patch
-#            export NEW=$(sha256sum 0002-glitched-cfs.patch | awk '{ print $1}')
-#            echo "sed -i 's/${OLD}/${NEW}/g' PKGBUILD" | bash
-#            export OLD=$(sha256sum 0003-glitched-eevdf-additions.patch | awk '{ print $1}')
-#            curl -L https://github.com/Frogging-Family/linux-tkg/raw/master/linux-tkg-patches/6.${MINORVERSION}/0003-glitched-eevdf-additions.patch -o 0003-glitched-eevdf-additions.patch
-#            export NEW=$(sha256sum 0003-glitched-eevdf-additions.patch | awk '{ print $1}')
-#            echo "sed -i 's/${OLD}/${NEW}/g' PKGBUILD" | bash
-#            export OLD=$(sha256sum 0004-o3-optimization.patch | awk '{ print $1}')
-#            curl -L https://github.com/Frogging-Family/linux-tkg/raw/master/linux-tkg-patches/6.${MINORVERSION}/0013-optimize_harder_O3.patch -o 0004-o3-optimization.patch
-#            export NEW=$(sha256sum 0004-o3-optimization.patch | awk '{ print $1}')
-#            echo "sed -i 's/${OLD}/${NEW}/g' PKGBUILD" | bash
       - name: Set UserID
         run: |
           echo "USERID=$(id -u $(whoami))" >> $GITHUB_ENV
