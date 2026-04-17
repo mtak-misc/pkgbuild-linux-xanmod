@@ -84,8 +84,8 @@ jobs:
           PKGVERSION=$(grep "pkgver=" PKGBUILD)
           OLDPATCHVERSION="${PKGVERSION#*"."}"
           MAJOR=$(grep "_major=" PKGBUILD)
-          OLDMAJORVERSION="${MAJOR%%.*}"
           OLDVERSION="${MAJOR#_major=}"
+          OLDMAJORVERSION="${OLDVERSION%%.*}"
           OLDMINORVERSION="${MAJOR#*.}"
           MINORVERSION=${OLDMINORVERSION}
           XANMOD=$(grep "xanmod=" PKGBUILD)
