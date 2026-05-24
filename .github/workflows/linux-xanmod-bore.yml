@@ -6,12 +6,12 @@ on:
       kernel_major_ver:
         type: string
         required: false
-        default: "6"
+        default: "7"
         description: "Kernel major version (e.g. 6, 7)"
       linux_xanmod_bore_ref:
         type: string
         required: false
-        default: "6.19"
+        default: "7.0"
         description: "linux-xanmod-bore repo branch ref (e.g. 6.19)"
       use_edge:
         type: boolean
