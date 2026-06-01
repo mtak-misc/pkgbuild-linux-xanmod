@@ -72,7 +72,7 @@ jobs:
             echo "sed -i 's/${BRANCH}/_branch=${KERNEL_MAJOR}.x/g' PKGBUILD" | bash
           fi
           sed -i '/scripts\/config --enable STACK_VALIDATION/a \ \ scripts\/config --set-val CONFIG_LOCALVERSION "-x64v2"' PKGBUILD
-          
+          sed -i '/scripts\/config --enable STACK_VALIDATION/a \ \ scripts\/config --set-val CONFIG_X86_64_VERSION "2"' PKGBUILD
           BRANCH=$(grep "_sf_branch=" PKGBUILD)
           OLDBRANCH="${BRANCH#_sf_branch=}"
           BRANCH="main"
