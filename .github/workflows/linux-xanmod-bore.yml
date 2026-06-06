@@ -67,7 +67,20 @@ jobs:
         run: |
           cd linux-xanmod-bore
 
+          sed -i -e '/cat \.config/a \
+            LINE_NUM=$(grep -E -n "KBUILD_CFLAGS :=" Makefile 2> /dev/null | head -n1 | cut -d":" -f1) \n\
+            echo "==> [DEBUG] KBUILD_CFLAGS insertion line: ${LINE_NUM:-NOT FOUND}" \n\
+            sed -i "${LINE_NUM}a KBUILD_CFLAGS += -march=x86-64-v2 -mtune=generic" Makefile' PKGBUILD
 
+          sed -i -e '/cat \.config/a \
+            CPP_LINE_NUM=$(grep -E -n "KBUILD_CPPFLAGS :=" Makefile | head -n1 | cut -d":" -f1) \n\
+            echo "==> [DEBUG] KBUILD_CPPFLAGS insertion line: ${CPP_LINE_NUM:-NOT FOUND}" \n\
+            sed -i "${CPP_LINE_NUM}a KBUILD_CPPFLAGS += -march=x86-64-v2 -mtune=generic" Makefile' PKGBUILD
+
+          sed -i -e 'cat \.config/a \
+            RUST_LINE_NUM=$(grep -E -n "KBUILD_RUSTFLAGS_KERNEL :=" Makefile | head -n1 | cut -d":" -f1) \n\
+            echo "==> [DEBUG] KBUILD_RUSTFLAGS insertion line: ${RUST_LINE_NUM:-NOT FOUND}" \n\
+            sed -i "${RUST_LINE_NUM}a KBUILD_RUSTFLAGS += -Ctarget-cpu=x86-64-v2 -Ztune-cpu=generic" Makefile' PKGBUILD
           
           if [ "${{ github.event.inputs.kernel_major_ver }}" != "" ]; then
             KERNEL_MAJOR="${{ github.event.inputs.kernel_major_ver }}"
