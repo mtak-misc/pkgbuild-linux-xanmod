@@ -70,7 +70,8 @@ jobs:
           sed -i -e '/cat \.config/a \
            LINE_NUM=$(grep -E -n "KBUILD_CFLAGS :=" Makefile 2> /dev/null | head -n1 | cut -d":" -f1) \n\
            echo "==> [DEBUG] KBUILD_CFLAGS insertion line: ${LINE_NUM:-NOT FOUND}" \n\
-           sed -i "${LINE_NUM}a KBUILD_CFLAGS += -march=x86-64-v2 -mtune=generic" Makefile' PKGBUILD
+           sed -i "${LINE_NUM}a KBUILD_CFLAGS += -march=x86-64-v2 -mtune=generic" Makefile\n\
+           cat ./Makefile' PKGBUILD
 
           sed -i -e '/cat \.config/a \
            CPP_LINE_NUM=$(grep -E -n "KBUILD_CPPFLAGS :=" Makefile | head -n1 | cut -d":" -f1) \n\
