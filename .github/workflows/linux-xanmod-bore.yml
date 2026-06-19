@@ -67,7 +67,7 @@ jobs:
         run: |
           cd linux-xanmod-bore
           export OLD=$(sha256sum 0004-o3-optimization.patch | awk '{ print $1}')
-          curl -L https://raw.githubusercontent.com/Frogging-Family/linux-tkg/refs/heads/master/linux-tkg-patches/7.1/0013-optimize_harder_O3.patch -o 0004-o3-optimization.patch
+          curl -L -o 0004-o3-optimization.patch https://raw.githubusercontent.com/Frogging-Family/linux-tkg/refs/heads/master/linux-tkg-patches/7.1/0013-optimize_harder_O3.patch 
           export NEW=$(sha256sum 0004-o3-optimization.patch | awk '{ print $1}')
           echo "sed -i 's/${OLD}/${NEW}/g' PKGBUILD" | bash
 
