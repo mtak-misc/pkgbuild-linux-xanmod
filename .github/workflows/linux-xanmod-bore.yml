@@ -67,9 +67,8 @@ jobs:
         run: |
           cd linux-xanmod-bore
         
-          sed '/0004-o3-optimization/d' PKGBUILD
+          sed -i '/0004-o3-optimization/d' PKGBUILD
           rm 0004-o3-optimization.patch
-          cat PKGBUILD
 
           sed -i -e '/cat \.config/a \
            LINE_NUM=$(grep -E -n "KBUILD_CFLAGS :=" Makefile 2> /dev/null | head -n1 | cut -d":" -f1) \n\
