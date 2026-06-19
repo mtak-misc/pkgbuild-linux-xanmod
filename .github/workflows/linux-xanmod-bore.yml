@@ -67,7 +67,7 @@ jobs:
         run: |
           cd linux-xanmod-bore
         
-          sed '/0004-o3-optimization.patch/d' PKGBUILD
+          sed '/0004-o3-optimization/d' PKGBUILD
           rm 0004-o3-optimization.patch
 
           sed -i -e '/cat \.config/a \
