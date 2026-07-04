@@ -6,7 +6,9 @@ useradd builder -u ${USERID} -m -G wheel && echo "builder ALL=(ALL) NOPASSWD: AL
 #chown builder -R ..
 #chown builder -R /tmp
 
-pacman --disable-sandbox --noconfirm -U *.pkg.tar.zst
+#pacman --disable-sandbox --noconfirm -U *.pkg.tar.zst
+pacman --noconfirm pacman-contrib
+updpkgsums PKGBUILD
 
 su builder -c "gpg --recv 38DBBDC86092693E"
 cd ./linux-xanmod-bore ; su builder -c "yes '' | MAKEFLAGS=\"-j $(nproc)\" env _compress_modules=y _use_numa=y _use_tracers=n _use_O3=y _compiler='clang' makepkg --noconfirm -sc"
