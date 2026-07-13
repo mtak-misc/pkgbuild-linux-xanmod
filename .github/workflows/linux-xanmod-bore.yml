@@ -11,7 +11,7 @@ on:
       linux_xanmod_bore_ref:
         type: string
         required: false
-        default: "7.0"
+        default: "7.1"
         description: "linux-xanmod-bore repo branch ref (e.g. 6.19)"
       use_edge:
         type: boolean
@@ -66,8 +66,6 @@ jobs:
       - name: Apply patches
         run: |
           cd linux-xanmod-bore
-        
-          sed -i '/0004-o3-optimization/d' PKGBUILD
 
           sed -i -e '/cat \.config/a \
            LINE_NUM=$(grep -E -n "KBUILD_CFLAGS :=" Makefile 2> /dev/null | head -n1 | cut -d":" -f1) \n\
