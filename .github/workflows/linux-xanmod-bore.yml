@@ -147,6 +147,7 @@ jobs:
               sed -i 's|SCHED_TUNABLESCALING_LOG;|SCHED_TUNABLESCALING_NONE;|g' ./0001-bore.patch
               sed -i '/util_est_update/d' ./0001-bore.patch
               sed -i 's|7410,6 +7470,15|7410,5 +7470,14|g' ./0001-bore.patch
+              cat ./0001-bore.patch
             else
               # single mode: copy the first 0001-linux*bore*.patch found and name it 0001-bore.patch
               MATCH=$(ls ${SRC_DIR}/0001-linux*bore*.patch 2>/dev/null | head -n1 || true)
