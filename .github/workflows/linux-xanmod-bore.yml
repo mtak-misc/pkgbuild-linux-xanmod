@@ -76,7 +76,7 @@ jobs:
           sed -i -e '/cat \.config/a \
            LINE_NUM=$(grep -E -n "KBUILD_LDLAGS :=" Makefile 2> /dev/null | head -n1 | cut -d":" -f1) \n\
            echo "==> [DEBUG] KBUILD_LDLAGS insertion line: ${LINE_NUM:-NOT FOUND}" \n\
-           sed -i "${LINE_NUM}a KBUILD_LDLAGS += -march=x86-64-v2 -mtune=generic -mllvm -inline-threshold=1000" Makefile\n\
+           sed -i "${LINE_NUM}a KBUILD_LDLAGS += -mllvm -inline-threshold=1000" Makefile\n\
            cat ./Makefile' PKGBUILD
            
           sed -i -e '/cat \.config/a \
