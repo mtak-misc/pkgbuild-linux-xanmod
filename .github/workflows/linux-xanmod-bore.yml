@@ -70,13 +70,19 @@ jobs:
           sed -i -e '/cat \.config/a \
            LINE_NUM=$(grep -E -n "KBUILD_CFLAGS :=" Makefile 2> /dev/null | head -n1 | cut -d":" -f1) \n\
            echo "==> [DEBUG] KBUILD_CFLAGS insertion line: ${LINE_NUM:-NOT FOUND}" \n\
-           sed -i "${LINE_NUM}a KBUILD_CFLAGS += -march=x86-64-v2 -mtune=generic" Makefile\n\
+           sed -i "${LINE_NUM}a KBUILD_CFLAGS += -march=x86-64-v2 -mtune=generic -mllvm -inline-threshold=1000" Makefile\n\
            cat ./Makefile' PKGBUILD
 
           sed -i -e '/cat \.config/a \
+           LINE_NUM=$(grep -E -n "KBUILD_LDLAGS :=" Makefile 2> /dev/null | head -n1 | cut -d":" -f1) \n\
+           echo "==> [DEBUG] KBUILD_LDLAGS insertion line: ${LINE_NUM:-NOT FOUND}" \n\
+           sed -i "${LINE_NUM}a KBUILD_LDLAGS += -march=x86-64-v2 -mtune=generic -mllvm -inline-threshold=1000" Makefile\n\
+           cat ./Makefile' PKGBUILD
+           
+          sed -i -e '/cat \.config/a \
            CPP_LINE_NUM=$(grep -E -n "KBUILD_CPPFLAGS :=" Makefile | head -n1 | cut -d":" -f1) \n\
            echo "==> [DEBUG] KBUILD_CPPFLAGS insertion line: ${CPP_LINE_NUM:-NOT FOUND}" \n\
-           sed -i "${CPP_LINE_NUM}a KBUILD_CPPFLAGS += -march=x86-64-v2 -mtune=generic" Makefile' PKGBUILD
+           sed -i "${CPP_LINE_NUM}a KBUILD_CPPFLAGS += -march=x86-64-v2 -mtune=generic -mllvm -inline-threshold=1000" Makefile' PKGBUILD
 
           sed -i -e '/cat \.config/a \
            RUST_LINE_NUM=$(grep -E -n "KBUILD_RUSTFLAGS_KERNEL :=" Makefile | head -n1 | cut -d":" -f1) \n\
