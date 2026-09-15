@@ -163,7 +163,7 @@ jobs:
             sed -i 's|SCHED_TUNABLESCALING_LOG;|SCHED_TUNABLESCALING_NONE;|g' ./0001-bore.patch
             sed -i '/util_est_update/d' ./0001-bore.patch
             sed -i 's|7410,6 +7470,15|7410,5 +7470,14|g' ./0001-bore.patch
-            cat ./0001-bore.patch
+            #cat ./0001-bore.patch
 
             sed -i -e 's/scaling = SCHED_TUNABLESCALING_LOG/scaling = SCHED_TUNABLESCALING_NONE/' ./0001-bore.patch
             NEW=$(sha256sum 0001-bore.patch | awk '{ print $1}')
