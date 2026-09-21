@@ -11,7 +11,7 @@ on:
       linux_xanmod_bore_ref:
         type: string
         required: false
-        default: "7.1"
+        default: "7.2"
         description: "linux-xanmod-bore repo branch ref (e.g. 6.19)"
       use_edge:
         type: boolean
