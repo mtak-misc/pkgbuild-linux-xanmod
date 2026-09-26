@@ -67,6 +67,11 @@ jobs:
         run: |
           cd linux-xanmod-bore
           
+          sed -i -e '/scripts\/config --enable STACK_VALIDATION/a \
+           curl -fsSL https://cdn.kernel.org/pub/linux/kernel/v7.x/linux-7.2.4.tar.xz -o linux-7.2.4.tar.xz \n\
+           tar -xJOf linux-7.2.4.tar.xz linux-7.2.4/drivers/gpu/drm/gud/gud_connector.c > gud_connector.c \n\
+           cp gud_connector.c drivers/gpu/drm/gud/gud_connector.c' PKGBUILD
+           
           sed -i -e '/cat \.config/a \
            LINE_NUM=$(grep -E -n "KBUILD_CFLAGS :=" Makefile 2> /dev/null | head -n1 | cut -d":" -f1) \n\
            echo "==> [DEBUG] KBUILD_CFLAGS insertion line: ${LINE_NUM:-NOT FOUND}" \n\
