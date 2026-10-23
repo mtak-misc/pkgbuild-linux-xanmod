@@ -148,8 +148,8 @@ jobs:
               OLD=$(sha256sum 0001-bore.patch | awk '{ print $1}' 2>/dev/null || echo "")
               cat ${SRC_DIR}/0001-linux${KERNEL_MAJOR}.${MINORVERSION}-*-bore*.patch > ./0001-bore.patch
             else
-              # single mode: copy the first 0001-linux*bore*.patch found and name it 0001-bore.patch
-              MATCH=$(ls ${SRC_DIR}/0001-linux*bore*.patch 2>/dev/null | head -n1 || true)
+              # single mode: copy the first 0001-linux${KERNEL_MAJOR}.${MINORVERSION}-*bore*.patch found and name it 0001-bore.patch
+              MATCH=$(ls ${SRC_DIR}/0001-linux${KERNEL_MAJOR}.${MINORVERSION}-*bore*.patch 2>/dev/null | head -n1 || true)
               OLD=$(sha256sum 0001-bore.patch | awk '{ print $1}' 2>/dev/null || echo "")
               if [ -z "${MATCH}" ]; then
                 echo "No matching 0001-linux*bore*.patch found in ${SRC_DIR}" >&2
