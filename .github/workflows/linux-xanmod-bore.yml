@@ -68,7 +68,7 @@ jobs:
           cd linux-xanmod-bore
           
           sed -i -e '/scripts\/config --enable STACK_VALIDATION/a \
-            sed -i '\''s/^static int gud_connector_add_tv_mode(/static noinline int gud_connector_add_tv_mode(/'\'' drivers/gpu/drm/gud/gud_connector.c' PKGBUILD
+            echo "CFLAGS_gud_connector.o += -O2" >> drivers/gpu/drm/gud/Makefile' PKGBUILD
 
           sed -i -e '/cat \.config/a \
            LINE_NUM=$(grep -E -n "KBUILD_CFLAGS :=" Makefile 2> /dev/null | head -n1 | cut -d":" -f1) \n\
